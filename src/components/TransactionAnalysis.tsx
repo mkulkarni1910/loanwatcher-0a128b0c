@@ -1,12 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Transaction, formatCurrency } from '@/utils/dummyData';
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
+import { Badge } from "@/components/ui/badge";
 
 interface TransactionAnalysisProps {
   transactions: Transaction[];
+  viewType: 'charts' | 'details';
 }
 
-export const TransactionAnalysis = ({ transactions }: TransactionAnalysisProps) => {
+export const TransactionAnalysis = ({ transactions, viewType }: TransactionAnalysisProps) => {
   const modeColors = {
     CASH: '#9b87f5',
     RTGS: '#b3a4f7',
@@ -27,101 +29,141 @@ export const TransactionAnalysis = ({ transactions }: TransactionAnalysisProps) 
   const creditData = getTransactionsByMode('CREDIT');
   const debitData = getTransactionsByMode('DEBIT');
 
-  return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="shadow-sm border-0">
-          <CardHeader>
-            <CardTitle className="text-xl text-[#333333]">Credit Transactions</CardTitle>
-          </CardHeader>
-          <CardContent className="h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={creditData}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                >
-                  {creditData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={modeColors[entry.name as keyof typeof modeColors]} />
-                  ))}
-                </Pie>
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+  const barData = ['CASH', 'RTGS', 'NEFT', 'CHEQUE'].map(mode => ({
+    name: mode,
+    credit: transactions.filter(t => t.type === 'CREDIT' && t.mode === mode)
+      .reduce((sum, t) => sum + t.amount, 0),
+    debit: transactions.filter(t => t.type === 'DEBIT' && t.mode === mode)
+      .reduce((sum, t) => sum + t.amount, 0),
+  }));
 
-        <Card className="shadow-sm border-0">
+  if (viewType === 'charts') {
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle className="text-xl text-[#333333]">Credit Distribution</CardTitle>
+            </CardHeader>
+            <CardContent className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={creditData}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={80}
+                    label={({ name, value }) => `${name}: ₹${(value / 1000).toFixed(1)}K`}
+                  >
+                    {creditData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={modeColors[entry.name as keyof typeof modeColors]} />
+                    ))}
+                  </Pie>
+                  <Legend />
+                  <Tooltip formatter={(value) => `₹${(Number(value)).toLocaleString('en-IN')}`} />
+                </PieChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+
+          <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle className="text-xl text-[#333333]">Debit Distribution</CardTitle>
+            </CardHeader>
+            <CardContent className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={debitData}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={80}
+                    label={({ name, value }) => `${name}: ₹${(value / 1000).toFixed(1)}K`}
+                  >
+                    {debitData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={modeColors[entry.name as keyof typeof modeColors]} />
+                    ))}
+                  </Pie>
+                  <Legend />
+                  <Tooltip formatter={(value) => `₹${(Number(value)).toLocaleString('en-IN')}`} />
+                </PieChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </div>
+
+        <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle className="text-xl text-[#333333]">Debit Transactions</CardTitle>
+            <CardTitle className="text-xl text-[#333333]">Transaction Comparison</CardTitle>
           </CardHeader>
-          <CardContent className="h-[300px]">
+          <CardContent className="h-[400px]">
             <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={debitData}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                >
-                  {debitData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={modeColors[entry.name as keyof typeof modeColors]} />
-                  ))}
-                </Pie>
+              <BarChart data={barData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip 
+                  formatter={(value) => `₹${(Number(value)).toLocaleString('en-IN')}`}
+                  labelStyle={{ color: '#333333' }}
+                />
                 <Legend />
-              </PieChart>
+                <Bar name="Credit" dataKey="credit" fill="#4ade80" />
+                <Bar name="Debit" dataKey="debit" fill="#f87171" />
+              </BarChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
       </div>
+    );
+  }
 
-      <Card className="shadow-sm border-0">
-        <CardHeader>
-          <CardTitle className="text-xl text-[#333333]">Transaction Details</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="text-left p-3 text-sm font-medium text-gray-500">Date</th>
-                  <th className="text-left p-3 text-sm font-medium text-gray-500">Type</th>
-                  <th className="text-left p-3 text-sm font-medium text-gray-500">Mode</th>
-                  <th className="text-right p-3 text-sm font-medium text-gray-500">Amount</th>
-                  <th className="text-left p-3 text-sm font-medium text-gray-500">Reference</th>
-                  <th className="text-left p-3 text-sm font-medium text-gray-500">Description</th>
+  return (
+    <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm">
+      <CardHeader>
+        <CardTitle className="text-xl text-[#333333]">Transaction Details</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-gray-200">
+                <th className="text-left p-3 text-sm font-medium text-gray-500">Date</th>
+                <th className="text-left p-3 text-sm font-medium text-gray-500">Type</th>
+                <th className="text-left p-3 text-sm font-medium text-gray-500">Mode</th>
+                <th className="text-right p-3 text-sm font-medium text-gray-500">Amount</th>
+                <th className="text-left p-3 text-sm font-medium text-gray-500">Reference</th>
+                <th className="text-left p-3 text-sm font-medium text-gray-500">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              {transactions.map(transaction => (
+                <tr key={transaction.id} className="border-b border-gray-100 hover:bg-gray-50/50">
+                  <td className="p-3">{new Date(transaction.date).toLocaleDateString('en-IN')}</td>
+                  <td className="p-3">
+                    <Badge variant={transaction.type === 'CREDIT' ? 'success' : 'destructive'}>
+                      {transaction.type}
+                    </Badge>
+                  </td>
+                  <td className="p-3">
+                    <Badge variant="outline" className="bg-white">
+                      {transaction.mode}
+                    </Badge>
+                  </td>
+                  <td className="p-3 text-right font-medium">
+                    {formatCurrency(transaction.amount)}
+                  </td>
+                  <td className="p-3 text-gray-600">{transaction.reference}</td>
+                  <td className="p-3 text-gray-600">{transaction.description}</td>
                 </tr>
-              </thead>
-              <tbody>
-                {transactions.map(transaction => (
-                  <tr key={transaction.id} className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="p-3">{new Date(transaction.date).toLocaleDateString()}</td>
-                    <td className="p-3">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        transaction.type === 'CREDIT' 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-red-100 text-red-800'
-                      }`}>
-                        {transaction.type}
-                      </span>
-                    </td>
-                    <td className="p-3">{transaction.mode}</td>
-                    <td className="p-3 text-right font-medium">{formatCurrency(transaction.amount)}</td>
-                    <td className="p-3 text-gray-600">{transaction.reference}</td>
-                    <td className="p-3 text-gray-600">{transaction.description}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
