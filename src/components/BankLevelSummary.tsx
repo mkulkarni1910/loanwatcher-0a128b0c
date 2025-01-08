@@ -61,22 +61,6 @@ export const BankLevelSummary = ({ customers, transactions }: BankLevelSummaryPr
           <div className="mt-8 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                <h3 className="font-medium text-gray-700">Transaction Mode</h3>
-                <RadioGroup 
-                  value={selectedMode} 
-                  onValueChange={(value) => setSelectedMode(value as typeof selectedMode)}
-                  className="flex flex-wrap gap-4"
-                >
-                  {['ALL', 'CASH', 'RTGS', 'NEFT', 'CHEQUE'].map((mode) => (
-                    <div key={mode} className="flex items-center space-x-2">
-                      <RadioGroupItem value={mode} id={`mode-${mode}`} />
-                      <Label htmlFor={`mode-${mode}`}>{mode}</Label>
-                    </div>
-                  ))}
-                </RadioGroup>
-              </div>
-
-              <div className="space-y-4">
                 <h3 className="font-medium text-gray-700">Transaction Type</h3>
                 <RadioGroup 
                   value={selectedType} 
@@ -87,6 +71,22 @@ export const BankLevelSummary = ({ customers, transactions }: BankLevelSummaryPr
                     <div key={type} className="flex items-center space-x-2">
                       <RadioGroupItem value={type} id={`type-${type}`} />
                       <Label htmlFor={`type-${type}`}>{type}</Label>
+                    </div>
+                  ))}
+                </RadioGroup>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="font-medium text-gray-700">Transaction Mode</h3>
+                <RadioGroup 
+                  value={selectedMode} 
+                  onValueChange={(value) => setSelectedMode(value as typeof selectedMode)}
+                  className="flex flex-wrap gap-4"
+                >
+                  {['ALL', 'CASH', 'RTGS', 'NEFT', 'CHEQUE'].map((mode) => (
+                    <div key={mode} className="flex items-center space-x-2">
+                      <RadioGroupItem value={mode} id={`mode-${mode}`} />
+                      <Label htmlFor={`mode-${mode}`}>{mode}</Label>
                     </div>
                   ))}
                 </RadioGroup>
