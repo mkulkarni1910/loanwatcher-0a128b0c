@@ -1,20 +1,21 @@
 import { useState } from 'react';
 import { CustomerSelect } from '@/components/CustomerSelect';
 import { TransactionAnalysis } from '@/components/TransactionAnalysis';
-import { Customer, getCustomerTransactions, customers } from '@/utils/dummyData';
+import { Customer, getCustomerTransactions, customers, transactions } from '@/utils/dummyData';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { IndianRupee, TrendingUp, TrendingDown, BarChart3, ListFilter } from 'lucide-react';
+import { BankLevelSummary } from '@/components/BankLevelSummary';
 
 const Index = () => {
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | undefined>();
-  const transactions = selectedCustomer ? getCustomerTransactions(selectedCustomer.id) : [];
+  const customerTransactions = selectedCustomer ? getCustomerTransactions(selectedCustomer.id) : [];
 
-  const totalCredit = transactions
+  const totalCredit = customerTransactions
     .filter(t => t.type === 'CREDIT')
     .reduce((sum, t) => sum + t.amount, 0);
 
-  const totalDebit = transactions
+  const totalDebit = customerTransactions
     .filter(t => t.type === 'DEBIT')
     .reduce((sum, t) => sum + t.amount, 0);
 
@@ -34,6 +35,11 @@ const Index = () => {
             })}
           </div>
         </div>
+
+        <BankLevelSummary 
+          customers={customers}
+          transactions={transactions}
+        />
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-1">
@@ -96,14 +102,14 @@ const Index = () => {
                   </TabsList>
                   <TabsContent value="charts">
                     <TransactionAnalysis 
-                      transactions={transactions}
+                      transactions={customerTransactions}
                       viewType="charts"
                       customers={customers}
                     />
                   </TabsContent>
                   <TabsContent value="details">
                     <TransactionAnalysis 
-                      transactions={transactions}
+                      transactions={customerTransactions}
                       viewType="details"
                       customers={customers}
                     />
