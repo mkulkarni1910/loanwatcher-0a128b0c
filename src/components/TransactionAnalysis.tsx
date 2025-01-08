@@ -41,7 +41,7 @@ export const TransactionAnalysis = ({ transactions, viewType }: TransactionAnaly
     return (
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm">
+          <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm hover:shadow-md transition-all duration-300">
             <CardHeader>
               <CardTitle className="text-xl text-[#333333]">Credit Distribution</CardTitle>
             </CardHeader>
@@ -56,6 +56,7 @@ export const TransactionAnalysis = ({ transactions, viewType }: TransactionAnaly
                     cy="50%"
                     outerRadius={80}
                     label={({ name, value }) => `${name}: ₹${(value / 1000).toFixed(1)}K`}
+                    className="hover:opacity-95 transition-opacity"
                   >
                     {creditData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={modeColors[entry.name as keyof typeof modeColors]} />
@@ -68,7 +69,7 @@ export const TransactionAnalysis = ({ transactions, viewType }: TransactionAnaly
             </CardContent>
           </Card>
 
-          <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm">
+          <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm hover:shadow-md transition-all duration-300">
             <CardHeader>
               <CardTitle className="text-xl text-[#333333]">Debit Distribution</CardTitle>
             </CardHeader>
@@ -83,6 +84,7 @@ export const TransactionAnalysis = ({ transactions, viewType }: TransactionAnaly
                     cy="50%"
                     outerRadius={80}
                     label={({ name, value }) => `${name}: ₹${(value / 1000).toFixed(1)}K`}
+                    className="hover:opacity-95 transition-opacity"
                   >
                     {debitData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={modeColors[entry.name as keyof typeof modeColors]} />
@@ -96,23 +98,29 @@ export const TransactionAnalysis = ({ transactions, viewType }: TransactionAnaly
           </Card>
         </div>
 
-        <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm">
+        <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm hover:shadow-md transition-all duration-300">
           <CardHeader>
             <CardTitle className="text-xl text-[#333333]">Transaction Comparison</CardTitle>
           </CardHeader>
           <CardContent className="h-[400px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={barData}>
-                <CartesianGrid strokeDasharray="3 3" />
+              <BarChart data={barData} className="hover:opacity-95 transition-opacity">
+                <CartesianGrid strokeDasharray="3 3" className="opacity-50" />
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip 
                   formatter={(value) => `₹${(Number(value)).toLocaleString('en-IN')}`}
                   labelStyle={{ color: '#333333' }}
+                  contentStyle={{ 
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                    borderRadius: '8px',
+                    border: '1px solid rgba(0, 0, 0, 0.1)',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                  }}
                 />
                 <Legend />
-                <Bar name="Credit" dataKey="credit" fill="#4ade80" />
-                <Bar name="Debit" dataKey="debit" fill="#f87171" />
+                <Bar name="Credit" dataKey="credit" fill="#4ade80" radius={[4, 4, 0, 0]} />
+                <Bar name="Debit" dataKey="debit" fill="#f87171" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -141,10 +149,10 @@ export const TransactionAnalysis = ({ transactions, viewType }: TransactionAnaly
             </thead>
             <tbody>
               {transactions.map(transaction => (
-                <tr key={transaction.id} className="border-b border-gray-100 hover:bg-gray-50/50">
+                <tr key={transaction.id} className="border-b border-gray-100 hover:bg-gray-50/50 transition-colors">
                   <td className="p-3">{new Date(transaction.date).toLocaleDateString('en-IN')}</td>
                   <td className="p-3">
-                    <Badge variant={transaction.type === 'CREDIT' ? 'success' : 'destructive'}>
+                    <Badge variant={transaction.type === 'CREDIT' ? 'default' : 'destructive'} className={transaction.type === 'CREDIT' ? 'bg-green-500' : ''}>
                       {transaction.type}
                     </Badge>
                   </td>
