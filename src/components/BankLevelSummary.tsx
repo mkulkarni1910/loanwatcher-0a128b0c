@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Transaction, Customer, formatCurrency } from '@/utils/dummyData';
-import { IndianRupee, Users, Banknote } from 'lucide-react';
+import { IndianRupee, Users } from 'lucide-react';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
@@ -36,7 +36,7 @@ export const BankLevelSummary = ({ customers, transactions }: BankLevelSummaryPr
           <CardTitle className="text-xl text-[#333333]">Bank Level Overview</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 gap-4">
             <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
               <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
                 <Users className="h-4 w-4" />
@@ -54,16 +54,6 @@ export const BankLevelSummary = ({ customers, transactions }: BankLevelSummaryPr
               </div>
               <div className="text-2xl font-semibold text-[#333333]">
                 {formatCurrency(totalLoanAmount)}
-              </div>
-            </div>
-
-            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
-              <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-                <Banknote className="h-4 w-4 text-orange-500" />
-                Cash Debits
-              </div>
-              <div className="text-2xl font-semibold text-orange-600">
-                {formatCurrency(transactions.filter(t => t.type === 'DEBIT' && t.mode === 'CASH').reduce((sum, t) => sum + t.amount, 0))}
               </div>
             </div>
           </div>
