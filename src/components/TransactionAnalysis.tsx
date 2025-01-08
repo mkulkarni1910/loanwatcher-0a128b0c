@@ -8,10 +8,10 @@ interface TransactionAnalysisProps {
 
 export const TransactionAnalysis = ({ transactions }: TransactionAnalysisProps) => {
   const modeColors = {
-    CASH: '#2c5282',
-    RTGS: '#4299e1',
-    NEFT: '#63b3ed',
-    CHEQUE: '#90cdf4'
+    CASH: '#9b87f5',
+    RTGS: '#b3a4f7',
+    NEFT: '#cbc1f9',
+    CHEQUE: '#e5deff'
   };
 
   const getTransactionsByMode = (type: 'CREDIT' | 'DEBIT') => {
@@ -28,11 +28,11 @@ export const TransactionAnalysis = ({ transactions }: TransactionAnalysisProps) 
   const debitData = getTransactionsByMode('DEBIT');
 
   return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card>
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card className="shadow-sm border-0">
           <CardHeader>
-            <CardTitle>Credit Transactions</CardTitle>
+            <CardTitle className="text-xl text-[#333333]">Credit Transactions</CardTitle>
           </CardHeader>
           <CardContent className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -55,9 +55,9 @@ export const TransactionAnalysis = ({ transactions }: TransactionAnalysisProps) 
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="shadow-sm border-0">
           <CardHeader>
-            <CardTitle>Debit Transactions</CardTitle>
+            <CardTitle className="text-xl text-[#333333]">Debit Transactions</CardTitle>
           </CardHeader>
           <CardContent className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -81,38 +81,40 @@ export const TransactionAnalysis = ({ transactions }: TransactionAnalysisProps) 
         </Card>
       </div>
 
-      <Card>
+      <Card className="shadow-sm border-0">
         <CardHeader>
-          <CardTitle>Transaction Details</CardTitle>
+          <CardTitle className="text-xl text-[#333333]">Transaction Details</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b">
-                  <th className="text-left p-2">Date</th>
-                  <th className="text-left p-2">Type</th>
-                  <th className="text-left p-2">Mode</th>
-                  <th className="text-right p-2">Amount</th>
-                  <th className="text-left p-2">Reference</th>
-                  <th className="text-left p-2">Description</th>
+                <tr className="border-b border-gray-200">
+                  <th className="text-left p-3 text-sm font-medium text-gray-500">Date</th>
+                  <th className="text-left p-3 text-sm font-medium text-gray-500">Type</th>
+                  <th className="text-left p-3 text-sm font-medium text-gray-500">Mode</th>
+                  <th className="text-right p-3 text-sm font-medium text-gray-500">Amount</th>
+                  <th className="text-left p-3 text-sm font-medium text-gray-500">Reference</th>
+                  <th className="text-left p-3 text-sm font-medium text-gray-500">Description</th>
                 </tr>
               </thead>
               <tbody>
                 {transactions.map(transaction => (
-                  <tr key={transaction.id} className="border-b">
-                    <td className="p-2">{new Date(transaction.date).toLocaleDateString()}</td>
-                    <td className="p-2">
-                      <span className={`px-2 py-1 rounded text-sm ${
-                        transaction.type === 'CREDIT' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                  <tr key={transaction.id} className="border-b border-gray-100 hover:bg-gray-50">
+                    <td className="p-3">{new Date(transaction.date).toLocaleDateString()}</td>
+                    <td className="p-3">
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        transaction.type === 'CREDIT' 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-red-100 text-red-800'
                       }`}>
                         {transaction.type}
                       </span>
                     </td>
-                    <td className="p-2">{transaction.mode}</td>
-                    <td className="p-2 text-right">{formatCurrency(transaction.amount)}</td>
-                    <td className="p-2">{transaction.reference}</td>
-                    <td className="p-2">{transaction.description}</td>
+                    <td className="p-3">{transaction.mode}</td>
+                    <td className="p-3 text-right font-medium">{formatCurrency(transaction.amount)}</td>
+                    <td className="p-3 text-gray-600">{transaction.reference}</td>
+                    <td className="p-3 text-gray-600">{transaction.description}</td>
                   </tr>
                 ))}
               </tbody>

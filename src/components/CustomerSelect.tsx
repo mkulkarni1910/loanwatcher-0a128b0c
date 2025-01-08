@@ -19,16 +19,16 @@ export const CustomerSelect = ({ onSelectCustomer, selectedCustomer }: CustomerS
   );
 
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle className="text-lg font-semibold">Select Customer</CardTitle>
+    <Card className="w-full shadow-sm border-0">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-xl text-[#333333]">Select Customer</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="relative">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
           <Input
-            placeholder="Search by name, account number or business name"
-            className="pl-8"
+            placeholder="Search by name or account"
+            className="pl-9 bg-white border-gray-200"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -37,10 +37,10 @@ export const CustomerSelect = ({ onSelectCustomer, selectedCustomer }: CustomerS
           {filteredCustomers.map(customer => (
             <div
               key={customer.id}
-              className={`p-3 rounded-lg cursor-pointer transition-colors ${
+              className={`p-4 rounded-lg cursor-pointer transition-all ${
                 selectedCustomer?.id === customer.id
-                  ? 'bg-primary text-white'
-                  : 'hover:bg-gray-100'
+                  ? 'bg-primary text-white shadow-md'
+                  : 'hover:bg-accent hover:text-accent-foreground'
               }`}
               onClick={() => onSelectCustomer(customer)}
             >
