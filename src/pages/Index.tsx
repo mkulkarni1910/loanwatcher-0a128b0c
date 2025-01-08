@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { CustomerSelect } from '@/components/CustomerSelect';
 import { TransactionAnalysis } from '@/components/TransactionAnalysis';
-import { Customer, getCustomerTransactions } from '@/utils/dummyData';
+import { Customer, getCustomerTransactions, customers } from '@/utils/dummyData';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { IndianRupee, TrendingUp, TrendingDown, BarChart3, ListFilter } from 'lucide-react';
@@ -98,12 +98,14 @@ const Index = () => {
                     <TransactionAnalysis 
                       transactions={transactions}
                       viewType="charts"
+                      customers={customers}
                     />
                   </TabsContent>
                   <TabsContent value="details">
                     <TransactionAnalysis 
                       transactions={transactions}
                       viewType="details"
+                      customers={customers}
                     />
                   </TabsContent>
                 </Tabs>
