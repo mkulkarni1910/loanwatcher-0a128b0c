@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { CustomerSelect } from '@/components/CustomerSelect';
 import { TransactionAnalysis } from '@/components/TransactionAnalysis';
@@ -6,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { IndianRupee, TrendingUp, TrendingDown, BarChart3, ListFilter } from 'lucide-react';
 import { BankLevelSummary } from '@/components/BankLevelSummary';
+import { PurposeAnalysis } from '@/components/transaction/PurposeAnalysis';
 
 const Index = () => {
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | undefined>();
@@ -47,6 +49,15 @@ const Index = () => {
               onSelectCustomer={setSelectedCustomer}
               selectedCustomer={selectedCustomer}
             />
+
+            {selectedCustomer && (
+              <div className="mt-6">
+                <PurposeAnalysis
+                  customer={selectedCustomer}
+                  transactions={customerTransactions}
+                />
+              </div>
+            )}
           </div>
           
           <div className="md:col-span-2">
