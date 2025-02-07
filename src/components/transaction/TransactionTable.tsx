@@ -1,3 +1,4 @@
+
 import { Transaction, formatCurrency } from '@/utils/dummyData';
 import { Badge } from "@/components/ui/badge";
 
@@ -21,7 +22,12 @@ export const TransactionTable = ({ transactions }: TransactionTableProps) => {
         </thead>
         <tbody>
           {transactions.map(transaction => (
-            <tr key={transaction.id} className="border-b border-gray-100 hover:bg-gray-50/50 transition-colors">
+            <tr 
+              key={transaction.id} 
+              className={`border-b border-gray-100 hover:bg-gray-50/50 transition-colors ${
+                transaction.mode === 'CASH' ? 'text-[#ea384c]' : ''
+              }`}
+            >
               <td className="p-3">{new Date(transaction.date).toLocaleDateString('en-IN')}</td>
               <td className="p-3">
                 <Badge variant={transaction.type === 'CREDIT' ? 'default' : 'destructive'} className={transaction.type === 'CREDIT' ? 'bg-green-500' : ''}>
@@ -29,7 +35,10 @@ export const TransactionTable = ({ transactions }: TransactionTableProps) => {
                 </Badge>
               </td>
               <td className="p-3">
-                <Badge variant="outline" className="bg-white">
+                <Badge 
+                  variant="outline" 
+                  className={`bg-white ${transaction.mode === 'CASH' ? 'border-[#ea384c] text-[#ea384c]' : ''}`}
+                >
                   {transaction.mode}
                 </Badge>
               </td>

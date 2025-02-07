@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Customer, Transaction, formatCurrency } from '@/utils/dummyData';
 import { Badge } from "@/components/ui/badge";
@@ -33,20 +34,20 @@ export const CashTransactionSummary = ({ customers, transactions }: CashTransact
   return (
     <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm">
       <CardHeader>
-        <CardTitle className="text-xl text-[#333333]">Cash Debit Analysis</CardTitle>
+        <CardTitle className="text-xl text-[#ea384c]">Cash Debit Analysis</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           {cashDebitCustomers.map(customer => (
-            <div key={customer.id} className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-all">
+            <div key={customer.id} className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-all border border-[#ea384c]/10">
               <div className="flex items-center justify-between mb-2">
                 <div className="font-medium text-lg">{customer.name}</div>
-                <Badge variant="outline" className="bg-white">
+                <Badge variant="outline" className="bg-white border-[#ea384c] text-[#ea384c]">
                   {customer.loanAccountNumber}
                 </Badge>
               </div>
               <div className="text-sm text-gray-600 mb-3">{customer.businessName}</div>
-              <div className="flex items-center gap-2 text-red-600">
+              <div className="flex items-center gap-2 text-[#ea384c]">
                 <IndianRupee className="h-4 w-4" />
                 <span className="font-semibold">
                   {formatCurrency(getTotalCashDebits(customer.id))}
