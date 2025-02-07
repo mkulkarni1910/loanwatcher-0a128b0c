@@ -27,6 +27,11 @@ export const ComplianceAnalysis = ({ customers, transactions }: ComplianceAnalys
     return { level: 'High', color: 'bg-red-500' };
   };
 
+  const getNonCompliantTransactions = (customerId: string) => {
+    const analysis = getTransactionPurposeAnalysis(customerId);
+    return analysis.transactions.filter(t => t.purposeAlignment === 'DEVIATED');
+  };
+
   return (
     <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm">
       <CardHeader>
@@ -51,6 +56,8 @@ export const ComplianceAnalysis = ({ customers, transactions }: ComplianceAnalys
               const utilizationRate = ((analysis.transactions
                 .filter(t => t.type === 'DEBIT')
                 .reduce((sum, t) => sum + t.amount, 0) / customer.loanAmount) * 100).toFixed(1);
+              
+              const nonCompliantTransactions = getNonCompliantTransactions(customer.id);
 
               return (
                 <Dialog key={customer.id}>
@@ -69,12 +76,17 @@ export const ComplianceAnalysis = ({ customers, transactions }: ComplianceAnalys
                   </DialogTrigger>
                   <DialogContent className="max-w-4xl">
                     <DialogHeader>
-                      <DialogTitle>Transaction Details - {customer.name}</DialogTitle>
+                      <DialogTitle>Non-Compliant Transactions - {customer.name}</DialogTitle>
                       <DialogDescription>
                         Business: {customer.businessName} | Sector: {customer.sector}
+                        <div className="mt-2">
+                          <Badge variant="destructive">
+                            {nonCompliantTransactions.length} Non-Compliant Transactions Found
+                          </Badge>
+                        </div>
                       </DialogDescription>
                     </DialogHeader>
-                    <TransactionTable transactions={analysis.transactions} />
+                    <TransactionTable transactions={nonCompliantTransactions} />
                   </DialogContent>
                 </Dialog>
               );
