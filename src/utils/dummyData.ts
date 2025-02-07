@@ -1,3 +1,4 @@
+
 export interface Customer {
   id: string;
   name: string;
@@ -193,10 +194,10 @@ export const transactions: Transaction[] = [
     type: 'DEBIT',
     mode: 'NEFT',
     amount: 1500000,
-    description: 'Inventory Purchase',
+    description: 'Personal Property Investment',
     reference: 'NEFT24022JKL',
-    category: 'INVENTORY',
-    purposeAlignment: 'ALIGNED'
+    category: 'PERSONAL',
+    purposeAlignment: 'DEVIATED'
   },
   {
     id: '7',
@@ -217,10 +218,10 @@ export const transactions: Transaction[] = [
     type: 'DEBIT',
     mode: 'CHEQUE',
     amount: 3000000,
-    description: 'Export Processing Equipment',
+    description: 'Personal Investments',
     reference: 'CHQ002346',
-    category: 'MACHINERY',
-    purposeAlignment: 'ALIGNED'
+    category: 'PERSONAL',
+    purposeAlignment: 'DEVIATED'
   },
   {
     id: '9',
@@ -252,7 +253,7 @@ export const transactions: Transaction[] = [
     date: '2024-02-07',
     type: 'DEBIT',
     mode: 'CASH',
-    amount: 1000000,
+    amount: 4500000,
     description: 'Personal Withdrawal',
     reference: 'CASH24034VWX',
     category: 'PERSONAL',
@@ -291,6 +292,54 @@ export const transactions: Transaction[] = [
     amount: 1500000,
     description: 'Investment in Personal Property',
     reference: 'NEFT24304GHI',
+    category: 'PERSONAL',
+    purposeAlignment: 'DEVIATED'
+  },
+  {
+    id: '15',
+    customerId: '8',
+    date: '2024-02-21',
+    type: 'CREDIT',
+    mode: 'RTGS',
+    amount: 2500000,
+    description: 'Loan Amount Disbursement',
+    reference: 'RTGS24221ABC',
+    category: 'LOAN_DISBURSEMENT',
+    purposeAlignment: 'ALIGNED'
+  },
+  {
+    id: '16',
+    customerId: '8',
+    date: '2024-02-22',
+    type: 'DEBIT',
+    mode: 'NEFT',
+    amount: 1800000,
+    description: 'Personal Investment Portfolio',
+    reference: 'NEFT24222DEF',
+    category: 'PERSONAL',
+    purposeAlignment: 'DEVIATED'
+  },
+  {
+    id: '17',
+    customerId: '6',
+    date: '2024-02-11',
+    type: 'CREDIT',
+    mode: 'RTGS',
+    amount: 8000000,
+    description: 'Loan Amount Disbursement',
+    reference: 'RTGS24211GHI',
+    category: 'LOAN_DISBURSEMENT',
+    purposeAlignment: 'ALIGNED'
+  },
+  {
+    id: '18',
+    customerId: '6',
+    date: '2024-02-12',
+    type: 'DEBIT',
+    mode: 'CHEQUE',
+    amount: 5000000,
+    description: 'Real Estate Investment',
+    reference: 'CHQ002347',
     category: 'PERSONAL',
     purposeAlignment: 'DEVIATED'
   }
