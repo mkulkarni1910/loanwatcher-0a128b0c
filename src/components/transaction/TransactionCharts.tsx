@@ -1,5 +1,6 @@
+
 import { Transaction, formatCurrency } from '@/utils/dummyData';
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Legend } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface TransactionChartsProps {
@@ -36,24 +37,28 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
         </CardHeader>
         <CardContent className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={creditData}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                label={({ name, value }) => `${name}: ₹${(value / 1000).toFixed(1)}K`}
-                className="hover:opacity-95 transition-opacity"
-              >
-                {creditData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={modeColors[entry.name]} />
-                ))}
-              </Pie>
+            <BarChart data={creditData} className="hover:opacity-95 transition-opacity">
+              <CartesianGrid strokeDasharray="3 3" className="opacity-50" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip 
+                formatter={(value) => `₹${(Number(value)).toLocaleString('en-IN')}`}
+                labelStyle={{ color: '#333333' }}
+                contentStyle={{ 
+                  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                  borderRadius: '8px',
+                  border: '1px solid rgba(0, 0, 0, 0.1)',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                }}
+              />
               <Legend />
-              <Tooltip formatter={(value) => `₹${(Number(value)).toLocaleString('en-IN')}`} />
-            </PieChart>
+              <Bar 
+                dataKey="value" 
+                fill="#4ade80" 
+                name="Credit Amount"
+                radius={[4, 4, 0, 0]}
+              />
+            </BarChart>
           </ResponsiveContainer>
         </CardContent>
       </Card>
@@ -64,24 +69,28 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
         </CardHeader>
         <CardContent className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={debitData}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                label={({ name, value }) => `${name}: ₹${(value / 1000).toFixed(1)}K`}
-                className="hover:opacity-95 transition-opacity"
-              >
-                {debitData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={modeColors[entry.name]} />
-                ))}
-              </Pie>
+            <BarChart data={debitData} className="hover:opacity-95 transition-opacity">
+              <CartesianGrid strokeDasharray="3 3" className="opacity-50" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip 
+                formatter={(value) => `₹${(Number(value)).toLocaleString('en-IN')}`}
+                labelStyle={{ color: '#333333' }}
+                contentStyle={{ 
+                  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                  borderRadius: '8px',
+                  border: '1px solid rgba(0, 0, 0, 0.1)',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                }}
+              />
               <Legend />
-              <Tooltip formatter={(value) => `₹${(Number(value)).toLocaleString('en-IN')}`} />
-            </PieChart>
+              <Bar 
+                dataKey="value" 
+                fill="#f87171" 
+                name="Debit Amount"
+                radius={[4, 4, 0, 0]}
+              />
+            </BarChart>
           </ResponsiveContainer>
         </CardContent>
       </Card>
