@@ -26,10 +26,10 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#fdfcfb] to-[#e2d1c3] p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex items-center justify-between bg-white/80 backdrop-blur-sm p-4 rounded-lg shadow-sm">
-          <h1 className="text-3xl font-bold text-[#333333] tracking-tight">
-            Janakalyan Bank - Loan Monitoring System
+          <h1 className="text-2xl font-bold text-[#333333]">
+            Janakalyan Bank
           </h1>
           <div className="text-sm text-gray-500">
             {new Date().toLocaleDateString('en-IN', { 
@@ -48,21 +48,21 @@ const Index = () => {
         
         <Tabs defaultValue="utilization" className="w-full">
           <TabsList className="grid w-full grid-cols-4 bg-white/80 backdrop-blur-sm">
-            <TabsTrigger value="utilization" className="flex items-center gap-2">
-              <GitCommitHorizontal className="h-4 w-4" />
-              Utilization Patterns
+            <TabsTrigger value="utilization">
+              <GitCommitHorizontal className="h-4 w-4 mr-2" />
+              Utilization
             </TabsTrigger>
-            <TabsTrigger value="compliance" className="flex items-center gap-2">
-              <Shield className="h-4 w-4" />
-              Compliance Analysis
+            <TabsTrigger value="compliance">
+              <Shield className="h-4 w-4 mr-2" />
+              Compliance
             </TabsTrigger>
-            <TabsTrigger value="behavioral" className="flex items-center gap-2">
-              <FileBarChart className="h-4 w-4" />
-              Behavioral Monitoring
+            <TabsTrigger value="behavioral">
+              <FileBarChart className="h-4 w-4 mr-2" />
+              Behavioral
             </TabsTrigger>
-            <TabsTrigger value="transactions" className="flex items-center gap-2">
-              <BarChart3 className="h-4 w-4" />
-              Transaction Analysis
+            <TabsTrigger value="transactions">
+              <BarChart3 className="h-4 w-4 mr-2" />
+              Transactions
             </TabsTrigger>
           </TabsList>
 
@@ -99,13 +99,13 @@ const Index = () => {
               <div className="md:col-span-2">
                 {selectedCustomer ? (
                   <>
-                    <Card className="mb-6 shadow-sm border-0 bg-white/80 backdrop-blur-sm hover:shadow-md transition-all duration-300">
+                    <Card className="mb-6 shadow-sm border-0 bg-white/80 backdrop-blur-sm">
                       <CardHeader>
                         <CardTitle className="text-xl text-[#333333]">Account Overview</CardTitle>
                       </CardHeader>
                       <CardContent>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
                             <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
                               <IndianRupee className="h-4 w-4" />
                               Loan Amount
@@ -114,7 +114,7 @@ const Index = () => {
                               ₹{selectedCustomer.loanAmount.toLocaleString('en-IN')}
                             </div>
                           </div>
-                          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
                             <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
                               <TrendingUp className="h-4 w-4 text-green-500" />
                               Total Credits
@@ -123,7 +123,7 @@ const Index = () => {
                               ₹{totalCredit.toLocaleString('en-IN')}
                             </div>
                           </div>
-                          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                          <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
                             <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
                               <TrendingDown className="h-4 w-4 text-red-500" />
                               Total Debits
@@ -146,7 +146,7 @@ const Index = () => {
                   <div className="h-full flex items-center justify-center p-12 bg-white/80 backdrop-blur-sm rounded-lg shadow-sm">
                     <p className="text-gray-500 flex items-center gap-2">
                       <ListFilter className="h-5 w-5" />
-                      Select a customer to view transaction analysis
+                      Select a customer to view analysis
                     </p>
                   </div>
                 )}
