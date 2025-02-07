@@ -89,20 +89,6 @@ export const BehavioralMonitoring = ({ customers, transactions }: BehavioralMoni
 
   return (
     <>
-      <div className="mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <img 
-            src="/lovable-uploads/38d91117-98e1-4137-b433-2aac756a49a2.png" 
-            alt="Bank Logo" 
-            className="h-12 w-12"
-          />
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800">Risk Monitoring Dashboard</h2>
-            <p className="text-sm text-gray-500">Real-time behavioral analysis and risk metrics</p>
-          </div>
-        </div>
-      </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {riskMetrics.map((metric, index) => (
           <Card 
