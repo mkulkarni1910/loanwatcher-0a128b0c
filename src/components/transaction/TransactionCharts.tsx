@@ -58,14 +58,15 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
 
   const chartConfig = {
     xAxis: { 
-      tick: { fill: '#333333', fontSize: 10 },
+      tick: { fill: '#333333', fontSize: 8 },
       stroke: '#D6BCFA',
       tickLine: { stroke: '#D6BCFA' }
     },
     yAxis: {
-      tick: { fill: '#333333', fontSize: 10 },
+      tick: { fill: '#333333', fontSize: 8 },
       stroke: '#D6BCFA',
-      tickLine: { stroke: '#D6BCFA' }
+      tickLine: { stroke: '#D6BCFA' },
+      tickFormatter: (value: number) => `₹${(value / 1000000).toFixed(1)}M`
     },
     tooltip: {
       contentStyle: {
@@ -74,15 +75,15 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
         border: '1px solid #E5DEFF',
         boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
         padding: '8px 12px',
-        fontSize: '10px',
+        fontSize: '8px',
         color: '#333333'
       },
-      labelStyle: { color: '#6E59A5', fontWeight: 600 }
+      labelStyle: { color: '#6E59A5', fontWeight: 600, fontSize: '10px' }
     },
     legend: {
       wrapperStyle: {
         paddingTop: '20px',
-        fontSize: '10px',
+        fontSize: '8px',
         color: '#333333'
       }
     }
@@ -246,3 +247,4 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
     </div>
   );
 };
+

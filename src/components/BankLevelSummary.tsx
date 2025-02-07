@@ -64,19 +64,28 @@ export const BankLevelSummary = ({ customers, transactions }: BankLevelSummaryPr
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={creditData} className="hover:opacity-95 transition-opacity">
                 <CartesianGrid strokeDasharray="3 3" className="opacity-50" />
-                <XAxis dataKey="name" />
-                <YAxis />
+                <XAxis 
+                  dataKey="name" 
+                  tick={{ fill: '#333333', fontSize: 8 }}
+                  tickLine={{ stroke: '#D6BCFA' }}
+                />
+                <YAxis 
+                  tick={{ fill: '#333333', fontSize: 8 }}
+                  tickFormatter={(value) => `₹${(value / 1000000).toFixed(1)}M`}
+                  tickLine={{ stroke: '#D6BCFA' }}
+                />
                 <Tooltip 
                   formatter={(value) => `₹${(Number(value)).toLocaleString('en-IN')}`}
-                  labelStyle={{ color: '#333333' }}
+                  labelStyle={{ color: '#333333', fontSize: 10 }}
                   contentStyle={{ 
                     backgroundColor: 'rgba(255, 255, 255, 0.9)',
                     borderRadius: '8px',
                     border: '1px solid rgba(0, 0, 0, 0.1)',
-                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                    fontSize: 10
                   }}
                 />
-                <Legend />
+                <Legend wrapperStyle={{ fontSize: 8 }} />
                 <Bar 
                   dataKey="value" 
                   fill="#4ade80" 
@@ -96,19 +105,28 @@ export const BankLevelSummary = ({ customers, transactions }: BankLevelSummaryPr
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={debitData} className="hover:opacity-95 transition-opacity">
                 <CartesianGrid strokeDasharray="3 3" className="opacity-50" />
-                <XAxis dataKey="name" />
-                <YAxis />
+                <XAxis 
+                  dataKey="name" 
+                  tick={{ fill: '#333333', fontSize: 8 }}
+                  tickLine={{ stroke: '#D6BCFA' }}
+                />
+                <YAxis 
+                  tick={{ fill: '#333333', fontSize: 8 }}
+                  tickFormatter={(value) => `₹${(value / 1000000).toFixed(1)}M`}
+                  tickLine={{ stroke: '#D6BCFA' }}
+                />
                 <Tooltip 
                   formatter={(value) => `₹${(Number(value)).toLocaleString('en-IN')}`}
-                  labelStyle={{ color: '#333333' }}
+                  labelStyle={{ color: '#333333', fontSize: 10 }}
                   contentStyle={{ 
                     backgroundColor: 'rgba(255, 255, 255, 0.9)',
                     borderRadius: '8px',
                     border: '1px solid rgba(0, 0, 0, 0.1)',
-                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                    fontSize: 10
                   }}
                 />
-                <Legend />
+                <Legend wrapperStyle={{ fontSize: 8 }} />
                 <Bar 
                   dataKey="value" 
                   fill="#f87171" 
@@ -123,3 +141,4 @@ export const BankLevelSummary = ({ customers, transactions }: BankLevelSummaryPr
     </div>
   );
 };
+
