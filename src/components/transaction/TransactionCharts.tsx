@@ -24,7 +24,8 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
     return modes.map(mode => ({
       name: mode,
       value: transactions.filter(t => t.type === type && t.mode === mode)
-        .reduce((sum, t) => sum + t.amount, 0)
+        .reduce((sum, t) => sum + t.amount, 0),
+      fill: mode === 'CASH' ? '#ea384c' : '#7E69AB'
     }));
   };
 
@@ -37,6 +38,8 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
       .reduce((sum, t) => sum + t.amount, 0),
     debit: transactions.filter(t => t.type === 'DEBIT' && t.mode === mode)
       .reduce((sum, t) => sum + t.amount, 0),
+    fillCredit: mode === 'CASH' ? '#ea384c' : '#9b87f5',
+    fillDebit: mode === 'CASH' ? '#ea384c' : '#7E69AB'
   }));
 
   const getTransactionDetails = () => {
@@ -157,10 +160,10 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
               <Legend {...chartConfig.legend} />
               <Bar 
                 dataKey="value" 
-                fill="#7E69AB"
                 name="Debit Amount"
                 radius={[4, 4, 0, 0]}
                 className="cursor-pointer"
+                fill={(data) => data.fill}
               />
             </BarChart>
           </ResponsiveContainer>
@@ -197,16 +200,16 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
               <Bar 
                 name="Credit" 
                 dataKey="credit" 
-                fill="#9b87f5" 
                 radius={[4, 4, 0, 0]}
-                className="cursor-pointer" 
+                className="cursor-pointer"
+                fill={(data) => data.fillCredit}
               />
               <Bar 
                 name="Debit" 
                 dataKey="debit" 
-                fill="#7E69AB" 
                 radius={[4, 4, 0, 0]}
                 className="cursor-pointer"
+                fill={(data) => data.fillDebit}
               />
             </BarChart>
           </ResponsiveContainer>
