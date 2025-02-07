@@ -103,13 +103,13 @@ export const UtilizationPatterns = ({ customers, transactions }: UtilizationPatt
                 <CartesianGrid strokeDasharray="3 3" stroke="#E5DEFF" />
                 <XAxis 
                   dataKey="month" 
-                  tick={{ fill: '#333333', fontSize: 12 }}
+                  tick={{ fill: '#333333', fontSize: 10 }}
                   stroke="#D6BCFA"
                   tickLine={{ stroke: '#D6BCFA' }}
                 />
                 <YAxis 
                   tickFormatter={(value) => `₹${(value / 1000000).toFixed(1)}M`}
-                  tick={{ fill: '#333333', fontSize: 12 }}
+                  tick={{ fill: '#333333', fontSize: 10 }}
                   stroke="#D6BCFA"
                   tickLine={{ stroke: '#D6BCFA' }}
                 />
@@ -121,7 +121,7 @@ export const UtilizationPatterns = ({ customers, transactions }: UtilizationPatt
                     border: '1px solid #E5DEFF',
                     boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
                     padding: '8px 12px',
-                    fontSize: '12px',
+                    fontSize: '10px',
                     color: '#333333'
                   }}
                   labelStyle={{ color: '#6E59A5', fontWeight: 600 }}
@@ -130,16 +130,16 @@ export const UtilizationPatterns = ({ customers, transactions }: UtilizationPatt
                 <Legend 
                   wrapperStyle={{
                     paddingTop: '20px',
-                    fontSize: '12px',
+                    fontSize: '10px',
                     color: '#333333'
                   }}
                 />
                 <Line 
                   type="monotone" 
                   dataKey="disbursement" 
-                  stroke="#9b87f5" 
+                  stroke="#4ade80" 
                   strokeWidth={2}
-                  dot={{ fill: '#9b87f5', r: 4 }}
+                  dot={{ fill: '#4ade80', r: 4 }}
                   activeDot={{ r: 6, strokeWidth: 0 }}
                   name="Loan Disbursement"
                   className="cursor-pointer"
@@ -147,9 +147,9 @@ export const UtilizationPatterns = ({ customers, transactions }: UtilizationPatt
                 <Line 
                   type="monotone" 
                   dataKey="utilization" 
-                  stroke="#7E69AB" 
+                  stroke="#ea384c" 
                   strokeWidth={2}
-                  dot={{ fill: '#7E69AB', r: 4 }}
+                  dot={{ fill: '#ea384c', r: 4 }}
                   activeDot={{ r: 6, strokeWidth: 0 }}
                   name="Fund Utilization"
                   className="cursor-pointer"
@@ -194,3 +194,4 @@ export const UtilizationPatterns = ({ customers, transactions }: UtilizationPatt
     </>
   );
 };
+

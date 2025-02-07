@@ -58,12 +58,12 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
 
   const chartConfig = {
     xAxis: { 
-      tick: { fill: '#333333', fontSize: 12 },
+      tick: { fill: '#333333', fontSize: 10 },
       stroke: '#D6BCFA',
       tickLine: { stroke: '#D6BCFA' }
     },
     yAxis: {
-      tick: { fill: '#333333', fontSize: 12 },
+      tick: { fill: '#333333', fontSize: 10 },
       stroke: '#D6BCFA',
       tickLine: { stroke: '#D6BCFA' }
     },
@@ -74,7 +74,7 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
         border: '1px solid #E5DEFF',
         boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
         padding: '8px 12px',
-        fontSize: '12px',
+        fontSize: '10px',
         color: '#333333'
       },
       labelStyle: { color: '#6E59A5', fontWeight: 600 }
@@ -82,7 +82,7 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
     legend: {
       wrapperStyle: {
         paddingTop: '20px',
-        fontSize: '12px',
+        fontSize: '10px',
         color: '#333333'
       }
     }
