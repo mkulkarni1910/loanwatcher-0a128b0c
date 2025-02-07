@@ -31,25 +31,31 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
 
   const chartConfig = {
     xAxis: { 
-      tick: { fill: '#333333' },
-      stroke: '#333333'
+      tick: { fill: '#333333', fontSize: 12 },
+      stroke: '#D6BCFA',
+      tickLine: { stroke: '#D6BCFA' }
     },
     yAxis: {
-      tick: { fill: '#333333' },
-      stroke: '#333333'
+      tick: { fill: '#333333', fontSize: 12 },
+      stroke: '#D6BCFA',
+      tickLine: { stroke: '#D6BCFA' }
     },
     tooltip: {
       contentStyle: {
         backgroundColor: 'rgba(255, 255, 255, 0.95)',
         borderRadius: '8px',
-        border: '1px solid rgba(0, 0, 0, 0.1)',
+        border: '1px solid #E5DEFF',
         boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+        padding: '8px 12px',
+        fontSize: '12px',
         color: '#333333'
       },
-      labelStyle: { color: '#333333' }
+      labelStyle: { color: '#6E59A5', fontWeight: 600 }
     },
     legend: {
       wrapperStyle: {
+        paddingTop: '20px',
+        fontSize: '12px',
         color: '#333333'
       }
     }
@@ -57,24 +63,21 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm hover:shadow-md transition-all duration-300">
+      <Card className="shadow-md border-0 bg-white/90 backdrop-blur-md hover:shadow-lg transition-all duration-300">
         <CardHeader>
-          <CardTitle className="text-xl text-[#333333]">Credit Distribution</CardTitle>
+          <CardTitle className="text-xl font-semibold text-[#333333]">Credit Distribution</CardTitle>
         </CardHeader>
         <CardContent className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={creditData} className="hover:opacity-95 transition-opacity">
-              <CartesianGrid strokeDasharray="3 3" className="opacity-50" />
-              <XAxis dataKey="name" {...chartConfig.xAxis} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#E5DEFF" />
+              <XAxis {...chartConfig.xAxis} dataKey="name" />
               <YAxis {...chartConfig.yAxis} />
-              <Tooltip 
-                formatter={(value) => `₹${(Number(value)).toLocaleString('en-IN')}`}
-                {...chartConfig.tooltip}
-              />
+              <Tooltip {...chartConfig.tooltip} formatter={(value) => `₹${(Number(value)).toLocaleString('en-IN')}`} />
               <Legend {...chartConfig.legend} />
               <Bar 
                 dataKey="value" 
-                fill="#4ade80" 
+                fill="#9b87f5"
                 name="Credit Amount"
                 radius={[4, 4, 0, 0]}
               />
@@ -83,24 +86,21 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
         </CardContent>
       </Card>
 
-      <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm hover:shadow-md transition-all duration-300">
+      <Card className="shadow-md border-0 bg-white/90 backdrop-blur-md hover:shadow-lg transition-all duration-300">
         <CardHeader>
-          <CardTitle className="text-xl text-[#333333]">Debit Distribution</CardTitle>
+          <CardTitle className="text-xl font-semibold text-[#333333]">Debit Distribution</CardTitle>
         </CardHeader>
         <CardContent className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={debitData} className="hover:opacity-95 transition-opacity">
-              <CartesianGrid strokeDasharray="3 3" className="opacity-50" />
-              <XAxis dataKey="name" {...chartConfig.xAxis} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#E5DEFF" />
+              <XAxis {...chartConfig.xAxis} dataKey="name" />
               <YAxis {...chartConfig.yAxis} />
-              <Tooltip 
-                formatter={(value) => `₹${(Number(value)).toLocaleString('en-IN')}`}
-                {...chartConfig.tooltip}
-              />
+              <Tooltip {...chartConfig.tooltip} formatter={(value) => `₹${(Number(value)).toLocaleString('en-IN')}`} />
               <Legend {...chartConfig.legend} />
               <Bar 
                 dataKey="value" 
-                fill="#f87171" 
+                fill="#7E69AB"
                 name="Debit Amount"
                 radius={[4, 4, 0, 0]}
               />
@@ -109,23 +109,20 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
         </CardContent>
       </Card>
 
-      <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm hover:shadow-md transition-all duration-300 md:col-span-2">
+      <Card className="shadow-md border-0 bg-white/90 backdrop-blur-md hover:shadow-lg transition-all duration-300 md:col-span-2">
         <CardHeader>
-          <CardTitle className="text-xl text-[#333333]">Transaction Comparison</CardTitle>
+          <CardTitle className="text-xl font-semibold text-[#333333]">Transaction Comparison</CardTitle>
         </CardHeader>
         <CardContent className="h-[400px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={barData} className="hover:opacity-95 transition-opacity">
-              <CartesianGrid strokeDasharray="3 3" className="opacity-50" />
-              <XAxis dataKey="name" {...chartConfig.xAxis} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#E5DEFF" />
+              <XAxis {...chartConfig.xAxis} dataKey="name" />
               <YAxis {...chartConfig.yAxis} />
-              <Tooltip 
-                formatter={(value) => `₹${(Number(value)).toLocaleString('en-IN')}`}
-                {...chartConfig.tooltip}
-              />
+              <Tooltip {...chartConfig.tooltip} formatter={(value) => `₹${(Number(value)).toLocaleString('en-IN')}`} />
               <Legend {...chartConfig.legend} />
-              <Bar name="Credit" dataKey="credit" fill="#4ade80" radius={[4, 4, 0, 0]} />
-              <Bar name="Debit" dataKey="debit" fill="#f87171" radius={[4, 4, 0, 0]} />
+              <Bar name="Credit" dataKey="credit" fill="#9b87f5" radius={[4, 4, 0, 0]} />
+              <Bar name="Debit" dataKey="debit" fill="#7E69AB" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
@@ -133,3 +130,4 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
     </div>
   );
 };
+
