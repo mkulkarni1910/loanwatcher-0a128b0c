@@ -89,6 +89,20 @@ export const BehavioralMonitoring = ({ customers, transactions }: BehavioralMoni
 
   return (
     <>
+      <div className="mb-6 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <img 
+            src="/lovable-uploads/38d91117-98e1-4137-b433-2aac756a49a2.png" 
+            alt="Bank Logo" 
+            className="h-12 w-12"
+          />
+          <div>
+            <h2 className="text-2xl font-bold text-gray-800">Risk Monitoring Dashboard</h2>
+            <p className="text-sm text-gray-500">Real-time behavioral analysis and risk metrics</p>
+          </div>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {riskMetrics.map((metric, index) => (
           <Card 
@@ -134,8 +148,8 @@ export const BehavioralMonitoring = ({ customers, transactions }: BehavioralMoni
               <TableHeader>
                 <TableRow>
                   <TableHead>Customer Name</TableHead>
+                  <TableHead>Business Name</TableHead>
                   <TableHead>Loan Purpose</TableHead>
-                  <TableHead>Loan Amount</TableHead>
                   <TableHead>Risk Level</TableHead>
                 </TableRow>
               </TableHeader>
@@ -143,8 +157,8 @@ export const BehavioralMonitoring = ({ customers, transactions }: BehavioralMoni
                 {selectedMetric?.affectedCustomers.map((customer) => (
                   <TableRow key={customer.id}>
                     <TableCell className="font-medium">{customer.name}</TableCell>
+                    <TableCell>{customer.businessName}</TableCell>
                     <TableCell>{customer.loanPurpose}</TableCell>
-                    <TableCell>₹{customer.loanAmount.toLocaleString('en-IN')}</TableCell>
                     <TableCell>
                       <span className={`px-2 py-1 rounded-full text-xs ${
                         customer.riskLevel === 'HIGH' ? 'bg-red-100 text-red-800' :
