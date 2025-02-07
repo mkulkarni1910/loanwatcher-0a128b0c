@@ -58,7 +58,8 @@ export const ComplianceAnalysis = ({ customers, transactions }: ComplianceAnalys
       nonCompliantCount: nonCompliantTransactions.length,
       totalValue: totalTransactionValue,
       deviatedValue,
-      riskFactors
+      riskFactors,
+      isHighRisk: deviationPercentage > 20
     };
   };
 
@@ -88,6 +89,7 @@ export const ComplianceAnalysis = ({ customers, transactions }: ComplianceAnalys
                 .reduce((sum, t) => sum + t.amount, 0) / customer.loanAmount) * 100).toFixed(1);
               
               const nonCompliantTransactions = getNonCompliantTransactions(customer.id);
+              const metrics = getComplianceAnalysis(customer);
 
               return (
                 <Dialog key={customer.id}>
@@ -118,49 +120,50 @@ export const ComplianceAnalysis = ({ customers, transactions }: ComplianceAnalys
                             </div>
                             <div className="bg-gray-50 p-4 rounded-lg">
                               <h3 className="font-medium mb-2">Compliance Metrics</h3>
-                              {(() => {
-                                const metrics = getComplianceAnalysis(customer);
-                                return (
-                                  <>
-                                    <p className="text-sm text-gray-600">
-                                      Purpose Alignment: {(100 - metrics.deviationPercentage).toFixed(1)}%
-                                    </p>
-                                    <p className="text-sm text-gray-600">
-                                      Non-Compliant Transactions: {metrics.nonCompliantCount} of {metrics.totalTransactions}
-                                    </p>
-                                    <p className="text-sm text-gray-600">
-                                      Deviated Value: {((metrics.deviatedValue / metrics.totalValue) * 100).toFixed(1)}% of total volume
-                                    </p>
-                                  </>
-                                );
-                              })()}
+                              <p className="text-sm text-gray-600">
+                                Purpose Alignment: {(100 - metrics.deviationPercentage).toFixed(1)}%
+                              </p>
+                              <p className="text-sm text-gray-600">
+                                Non-Compliant Transactions: {metrics.nonCompliantCount} of {metrics.totalTransactions}
+                              </p>
+                              <p className="text-sm text-gray-600">
+                                Deviated Value: {((metrics.deviatedValue / metrics.totalValue) * 100).toFixed(1)}% of total volume
+                              </p>
                             </div>
                           </div>
 
-                          {(() => {
-                            const metrics = getComplianceAnalysis(customer);
-                            return metrics.deviationPercentage > 20 ? (
-                              <Alert variant="destructive">
-                                <AlertTriangle className="h-4 w-4" />
-                                <AlertTitle>Risk Factors Identified</AlertTitle>
-                                <AlertDescription>
+                          {metrics.isHighRisk ? (
+                            <Alert variant="destructive">
+                              <AlertTriangle className="h-4 w-4" />
+                              <AlertTitle>High Risk Status</AlertTitle>
+                              <AlertDescription>
+                                <div className="space-y-2">
+                                  <p>This customer has been flagged as high risk due to significant deviations from intended loan purpose.</p>
                                   <ul className="list-disc pl-4 mt-2">
                                     {metrics.riskFactors.map((factor, index) => (
                                       <li key={index}>{factor}</li>
                                     ))}
                                   </ul>
-                                </AlertDescription>
-                              </Alert>
-                            ) : (
-                              <Alert variant="default" className="bg-green-50 border-green-200">
-                                <CheckCircle className="h-4 w-4 text-green-500" />
-                                <AlertTitle className="text-green-800">Good Compliance Standing</AlertTitle>
-                                <AlertDescription className="text-green-700">
-                                  Transaction patterns align well with intended loan purpose
-                                </AlertDescription>
-                              </Alert>
-                            );
-                          })()}
+                                </div>
+                              </AlertDescription>
+                            </Alert>
+                          ) : metrics.deviationPercentage > 10 ? (
+                            <Alert variant="default" className="bg-yellow-50 border-yellow-200">
+                              <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                              <AlertTitle className="text-yellow-800">Moderate Risk Detected</AlertTitle>
+                              <AlertDescription className="text-yellow-700">
+                                Some transactions show deviation from intended purpose. Close monitoring recommended.
+                              </AlertDescription>
+                            </Alert>
+                          ) : (
+                            <Alert variant="default" className="bg-green-50 border-green-200">
+                              <CheckCircle className="h-4 w-4 text-green-500" />
+                              <AlertTitle className="text-green-800">Good Compliance Standing</AlertTitle>
+                              <AlertDescription className="text-green-700">
+                                Transaction patterns align well with intended loan purpose
+                              </AlertDescription>
+                            </Alert>
+                          )}
 
                           <div>
                             <h3 className="font-medium mb-2">Non-Compliant Transactions</h3>
@@ -179,3 +182,4 @@ export const ComplianceAnalysis = ({ customers, transactions }: ComplianceAnalys
     </Card>
   );
 };
+
