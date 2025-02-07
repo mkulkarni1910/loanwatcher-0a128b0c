@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Transaction, Customer, formatCurrency } from '@/utils/dummyData';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -16,7 +17,7 @@ export const TransactionAnalysis = ({ transactions, viewType, customers }: Trans
   const [selectedMode, setSelectedMode] = useState<string>('all');
 
   const modeColors = {
-    CASH: '#9b87f5',
+    CASH: '#ea384c',
     RTGS: '#b3a4f7',
     NEFT: '#cbc1f9',
     CHEQUE: '#e5deff'
