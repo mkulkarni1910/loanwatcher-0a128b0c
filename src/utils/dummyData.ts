@@ -1,4 +1,3 @@
-
 export interface Customer {
   id: string;
   name: string;
@@ -127,7 +126,6 @@ export const customers: Customer[] = [
 ];
 
 export const transactions: Transaction[] = [
-  // Rajesh Kumar's transactions
   {
     id: '1',
     customerId: '1',
@@ -176,8 +174,6 @@ export const transactions: Transaction[] = [
     category: 'MISC_EXPENSES',
     purposeAlignment: 'DEVIATED'
   },
-
-  // Priya Sharma's transactions
   {
     id: '5',
     customerId: '2',
@@ -202,8 +198,6 @@ export const transactions: Transaction[] = [
     category: 'INVENTORY',
     purposeAlignment: 'ALIGNED'
   },
-  
-  // Mohammed Ali's transactions
   {
     id: '7',
     customerId: '3',
@@ -228,8 +222,6 @@ export const transactions: Transaction[] = [
     category: 'MACHINERY',
     purposeAlignment: 'ALIGNED'
   },
-
-  // Add more transactions for other customers...
   {
     id: '9',
     customerId: '4',
@@ -263,6 +255,42 @@ export const transactions: Transaction[] = [
     amount: 1000000,
     description: 'Personal Withdrawal',
     reference: 'CASH24034VWX',
+    category: 'PERSONAL',
+    purposeAlignment: 'DEVIATED'
+  },
+  {
+    id: '12',
+    customerId: '10',
+    date: '2024-03-02',
+    type: 'CREDIT',
+    mode: 'RTGS',
+    amount: 3500000,
+    description: 'Loan Amount Disbursement',
+    reference: 'RTGS24302ABC',
+    category: 'LOAN_DISBURSEMENT',
+    purposeAlignment: 'ALIGNED'
+  },
+  {
+    id: '13',
+    customerId: '10',
+    date: '2024-03-03',
+    type: 'DEBIT',
+    mode: 'CASH',
+    amount: 1000000,
+    description: 'Personal Expenses',
+    reference: 'CASH24303DEF',
+    category: 'PERSONAL',
+    purposeAlignment: 'DEVIATED'
+  },
+  {
+    id: '14',
+    customerId: '10',
+    date: '2024-03-04',
+    type: 'DEBIT',
+    mode: 'NEFT',
+    amount: 1500000,
+    description: 'Investment in Personal Property',
+    reference: 'NEFT24304GHI',
     category: 'PERSONAL',
     purposeAlignment: 'DEVIATED'
   }
