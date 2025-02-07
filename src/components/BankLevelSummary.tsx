@@ -1,10 +1,10 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Transaction, Customer, formatCurrency } from '@/utils/dummyData';
 import { IndianRupee, Users } from 'lucide-react';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
 
 interface BankLevelSummaryProps {
   customers: Customer[];
@@ -16,18 +16,6 @@ export const BankLevelSummary = ({ customers, transactions }: BankLevelSummaryPr
   const [selectedType, setSelectedType] = useState<'ALL' | 'CREDIT' | 'DEBIT'>('ALL');
 
   const totalLoanAmount = customers.reduce((sum, customer) => sum + customer.loanAmount, 0);
-  
-  const filteredTransactions = transactions.filter(t => {
-    const modeMatch = selectedMode === 'ALL' ? true : t.mode === selectedMode;
-    const typeMatch = selectedType === 'ALL' ? true : t.type === selectedType;
-    return modeMatch && typeMatch;
-  });
-
-  const filteredCustomers = customers.filter(customer => 
-    filteredTransactions.some(t => t.customerId === customer.id)
-  );
-
-  const totalFilteredAmount = filteredTransactions.reduce((sum, t) => sum + t.amount, 0);
 
   return (
     <div className="space-y-6">
@@ -90,50 +78,6 @@ export const BankLevelSummary = ({ customers, transactions }: BankLevelSummaryPr
                     </div>
                   ))}
                 </RadioGroup>
-              </div>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-medium text-gray-700">
-                  Filtered Transactions Summary
-                </h3>
-                <div className="text-sm text-gray-500">
-                  {filteredCustomers.length} customers | Total Amount: {formatCurrency(totalFilteredAmount)}
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                {filteredCustomers.map(customer => {
-                  const customerTransactions = filteredTransactions.filter(t => t.customerId === customer.id);
-                  const totalAmount = customerTransactions.reduce((sum, t) => sum + t.amount, 0);
-
-                  return (
-                    <div key={customer.id} className="bg-gray-50 p-4 rounded-lg hover:shadow-sm transition-all">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="font-medium">{customer.name}</div>
-                        <Badge variant="outline" className="bg-white">
-                          {customer.loanAccountNumber}
-                        </Badge>
-                      </div>
-                      <div className="text-sm text-gray-600 mb-2">{customer.businessName}</div>
-                      <div className="flex items-center justify-between text-sm">
-                        <div className="text-gray-500">
-                          {customerTransactions.length} transactions
-                        </div>
-                        <div className="font-medium">
-                          {formatCurrency(totalAmount)}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-
-                {filteredCustomers.length === 0 && (
-                  <div className="text-center text-gray-500 py-4">
-                    No customers found with the selected filters
-                  </div>
-                )}
               </div>
             </div>
           </div>
