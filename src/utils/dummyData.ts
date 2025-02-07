@@ -7,6 +7,8 @@ export interface Customer {
   disbursementDate: string;
   sector: string;
   intendedPurpose: string;
+  loanPurpose: string;
+  riskLevel: 'HIGH' | 'MEDIUM' | 'LOW';
 }
 
 export interface Transaction {
@@ -31,7 +33,9 @@ export const customers: Customer[] = [
     loanAmount: 5000000,
     disbursementDate: '2024-01-15',
     sector: 'Manufacturing',
-    intendedPurpose: 'Purchase of machinery for textile manufacturing'
+    intendedPurpose: 'Purchase of machinery for textile manufacturing',
+    loanPurpose: 'Machinery Purchase & Working Capital',
+    riskLevel: 'MEDIUM'
   },
   {
     id: '2',
@@ -41,7 +45,9 @@ export const customers: Customer[] = [
     loanAmount: 3000000,
     disbursementDate: '2024-01-20',
     sector: 'Trading',
-    intendedPurpose: 'Working capital for wholesale business'
+    intendedPurpose: 'Working capital for wholesale business',
+    loanPurpose: 'Working Capital',
+    riskLevel: 'HIGH'
   },
   {
     id: '3',
@@ -51,7 +57,9 @@ export const customers: Customer[] = [
     loanAmount: 7500000,
     disbursementDate: '2024-01-10',
     sector: 'Export',
-    intendedPurpose: 'Export business expansion'
+    intendedPurpose: 'Export business expansion',
+    loanPurpose: 'Business Expansion',
+    riskLevel: 'HIGH'
   },
   {
     id: '4',
@@ -61,7 +69,9 @@ export const customers: Customer[] = [
     loanAmount: 4500000,
     disbursementDate: '2024-02-01',
     sector: 'Agriculture',
-    intendedPurpose: 'Setting up food processing unit'
+    intendedPurpose: 'Setting up food processing unit',
+    loanPurpose: 'Equipment Purchase',
+    riskLevel: 'LOW'
   },
   {
     id: '5',
@@ -71,7 +81,9 @@ export const customers: Customer[] = [
     loanAmount: 6000000,
     disbursementDate: '2024-02-05',
     sector: 'Technology',
-    intendedPurpose: 'Software development center setup'
+    intendedPurpose: 'Software development center setup',
+    loanPurpose: 'Infrastructure Setup',
+    riskLevel: 'HIGH'
   },
   {
     id: '6',
@@ -81,7 +93,9 @@ export const customers: Customer[] = [
     loanAmount: 8000000,
     disbursementDate: '2024-02-10',
     sector: 'Healthcare',
-    intendedPurpose: 'Medical equipment purchase'
+    intendedPurpose: 'Medical equipment purchase',
+    loanPurpose: 'Equipment Purchase',
+    riskLevel: 'HIGH'
   },
   {
     id: '7',
@@ -91,7 +105,9 @@ export const customers: Customer[] = [
     loanAmount: 5500000,
     disbursementDate: '2024-02-15',
     sector: 'Transportation',
-    intendedPurpose: 'Fleet expansion'
+    intendedPurpose: 'Fleet expansion',
+    loanPurpose: 'Vehicle Purchase',
+    riskLevel: 'LOW'
   },
   {
     id: '8',
@@ -101,7 +117,9 @@ export const customers: Customer[] = [
     loanAmount: 2500000,
     disbursementDate: '2024-02-20',
     sector: 'Food & Beverage',
-    intendedPurpose: 'Restaurant chain expansion'
+    intendedPurpose: 'Restaurant chain expansion',
+    loanPurpose: 'Business Expansion',
+    riskLevel: 'HIGH'
   },
   {
     id: '9',
@@ -111,7 +129,9 @@ export const customers: Customer[] = [
     loanAmount: 4000000,
     disbursementDate: '2024-02-25',
     sector: 'Textile',
-    intendedPurpose: 'Garment factory setup'
+    intendedPurpose: 'Garment factory setup',
+    loanPurpose: 'Infrastructure Setup',
+    riskLevel: 'MEDIUM'
   },
   {
     id: '10',
@@ -121,7 +141,9 @@ export const customers: Customer[] = [
     loanAmount: 3500000,
     disbursementDate: '2024-03-01',
     sector: 'Education',
-    intendedPurpose: 'Educational institute expansion'
+    intendedPurpose: 'Educational institute expansion',
+    loanPurpose: 'Infrastructure Setup',
+    riskLevel: 'HIGH'
   }
 ];
 
