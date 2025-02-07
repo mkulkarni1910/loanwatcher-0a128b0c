@@ -1,7 +1,10 @@
 
-import { Transaction, formatCurrency } from '@/utils/dummyData';
+import { Transaction, formatCurrency, Customer } from '@/utils/dummyData';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Legend } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useState } from "react";
 
 interface TransactionChartsProps {
   transactions: Transaction[];
@@ -9,6 +12,13 @@ interface TransactionChartsProps {
 }
 
 export const TransactionCharts = ({ transactions, modeColors }: TransactionChartsProps) => {
+  const [selectedData, setSelectedData] = useState<{
+    mode: string;
+    type: 'credit' | 'debit';
+    value: number;
+  } | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+
   const getTransactionsByMode = (type: 'CREDIT' | 'DEBIT') => {
     const modes = ['CASH', 'RTGS', 'NEFT', 'CHEQUE'] as const;
     return modes.map(mode => ({
@@ -28,6 +38,23 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
     debit: transactions.filter(t => t.type === 'DEBIT' && t.mode === mode)
       .reduce((sum, t) => sum + t.amount, 0),
   }));
+
+  const getTransactionDetails = () => {
+    if (!selectedData) return [];
+
+    const filteredTransactions = transactions.filter(t => 
+      t.mode === selectedData.mode && 
+      t.type === selectedData.type.toUpperCase()
+    );
+
+    return filteredTransactions.map(t => ({
+      transaction: t,
+      amount: t.amount,
+      date: new Date(t.date).toLocaleDateString('en-IN'),
+      reference: t.reference,
+      description: t.description
+    }));
+  };
 
   const chartConfig = {
     xAxis: { 
@@ -69,7 +96,21 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
         </CardHeader>
         <CardContent className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={creditData} className="hover:opacity-95 transition-opacity">
+            <BarChart 
+              data={creditData} 
+              className="hover:opacity-95 transition-opacity"
+              onClick={(data) => {
+                if (data && data.activePayload) {
+                  const payload = data.activePayload[0].payload;
+                  setSelectedData({
+                    mode: payload.name,
+                    type: 'credit',
+                    value: payload.value
+                  });
+                  setDialogOpen(true);
+                }
+              }}
+            >
               <CartesianGrid strokeDasharray="3 3" stroke="#E5DEFF" />
               <XAxis {...chartConfig.xAxis} dataKey="name" />
               <YAxis {...chartConfig.yAxis} />
@@ -80,6 +121,7 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
                 fill="#9b87f5"
                 name="Credit Amount"
                 radius={[4, 4, 0, 0]}
+                className="cursor-pointer"
               />
             </BarChart>
           </ResponsiveContainer>
@@ -92,7 +134,21 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
         </CardHeader>
         <CardContent className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={debitData} className="hover:opacity-95 transition-opacity">
+            <BarChart 
+              data={debitData} 
+              className="hover:opacity-95 transition-opacity"
+              onClick={(data) => {
+                if (data && data.activePayload) {
+                  const payload = data.activePayload[0].payload;
+                  setSelectedData({
+                    mode: payload.name,
+                    type: 'debit',
+                    value: payload.value
+                  });
+                  setDialogOpen(true);
+                }
+              }}
+            >
               <CartesianGrid strokeDasharray="3 3" stroke="#E5DEFF" />
               <XAxis {...chartConfig.xAxis} dataKey="name" />
               <YAxis {...chartConfig.yAxis} />
@@ -103,6 +159,7 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
                 fill="#7E69AB"
                 name="Debit Amount"
                 radius={[4, 4, 0, 0]}
+                className="cursor-pointer"
               />
             </BarChart>
           </ResponsiveContainer>
@@ -115,19 +172,77 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
         </CardHeader>
         <CardContent className="h-[400px]">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={barData} className="hover:opacity-95 transition-opacity">
+            <BarChart 
+              data={barData} 
+              className="hover:opacity-95 transition-opacity"
+              onClick={(data) => {
+                if (data && data.activePayload) {
+                  const payload = data.activePayload[0].payload;
+                  const dataKey = data.activePayload[0].dataKey as 'credit' | 'debit';
+                  setSelectedData({
+                    mode: payload.name,
+                    type: dataKey,
+                    value: payload[dataKey]
+                  });
+                  setDialogOpen(true);
+                }
+              }}
+            >
               <CartesianGrid strokeDasharray="3 3" stroke="#E5DEFF" />
               <XAxis {...chartConfig.xAxis} dataKey="name" />
               <YAxis {...chartConfig.yAxis} />
               <Tooltip {...chartConfig.tooltip} formatter={(value) => `₹${(Number(value)).toLocaleString('en-IN')}`} />
               <Legend {...chartConfig.legend} />
-              <Bar name="Credit" dataKey="credit" fill="#9b87f5" radius={[4, 4, 0, 0]} />
-              <Bar name="Debit" dataKey="debit" fill="#7E69AB" radius={[4, 4, 0, 0]} />
+              <Bar 
+                name="Credit" 
+                dataKey="credit" 
+                fill="#9b87f5" 
+                radius={[4, 4, 0, 0]}
+                className="cursor-pointer" 
+              />
+              <Bar 
+                name="Debit" 
+                dataKey="debit" 
+                fill="#7E69AB" 
+                radius={[4, 4, 0, 0]}
+                className="cursor-pointer"
+              />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
       </Card>
+
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle>
+              {selectedData?.mode} {selectedData?.type.toUpperCase()} Transactions
+            </DialogTitle>
+          </DialogHeader>
+          <div className="mt-4">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Amount</TableHead>
+                  <TableHead>Reference</TableHead>
+                  <TableHead>Description</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {getTransactionDetails().map((detail) => (
+                  <TableRow key={detail.transaction.id}>
+                    <TableCell>{detail.date}</TableCell>
+                    <TableCell>{formatCurrency(detail.amount)}</TableCell>
+                    <TableCell>{detail.reference}</TableCell>
+                    <TableCell>{detail.description}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
-
