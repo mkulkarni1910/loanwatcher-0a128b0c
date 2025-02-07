@@ -42,21 +42,32 @@ export const UtilizationPatterns = ({ customers, transactions }: UtilizationPatt
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={monthlyData}>
               <CartesianGrid strokeDasharray="3 3" className="opacity-50" />
-              <XAxis dataKey="month" />
+              <XAxis 
+                dataKey="month" 
+                tick={{ fill: '#333333' }}
+                stroke="#333333"
+              />
               <YAxis 
                 tickFormatter={(value) => `₹${(value / 1000000).toFixed(1)}M`}
+                tick={{ fill: '#333333' }}
+                stroke="#333333"
               />
               <Tooltip 
                 formatter={(value: number) => [`₹${value.toLocaleString('en-IN')}`, '']}
                 labelStyle={{ color: '#333333' }}
                 contentStyle={{ 
-                  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.95)',
                   borderRadius: '8px',
                   border: '1px solid rgba(0, 0, 0, 0.1)',
-                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                  color: '#333333'
                 }}
               />
-              <Legend />
+              <Legend 
+                wrapperStyle={{
+                  color: '#333333'
+                }}
+              />
               <Line 
                 type="monotone" 
                 dataKey="disbursement" 
