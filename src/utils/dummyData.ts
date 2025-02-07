@@ -1,4 +1,3 @@
-
 export interface Customer {
   id: string;
   name: string;
@@ -192,10 +191,10 @@ export const transactions: Transaction[] = [
     customerId: '2',
     date: '2024-01-22',
     type: 'DEBIT',
-    mode: 'NEFT',
+    mode: 'CASH',
     amount: 1500000,
     description: 'Personal Property Investment',
-    reference: 'NEFT24022JKL',
+    reference: 'CASH24022JKL',
     category: 'PERSONAL',
     purposeAlignment: 'DEVIATED'
   },
@@ -216,10 +215,10 @@ export const transactions: Transaction[] = [
     customerId: '3',
     date: '2024-01-12',
     type: 'DEBIT',
-    mode: 'CHEQUE',
+    mode: 'CASH',
     amount: 3000000,
     description: 'Personal Investments',
-    reference: 'CHQ002346',
+    reference: 'CASH002346',
     category: 'PERSONAL',
     purposeAlignment: 'DEVIATED'
   },
@@ -288,10 +287,10 @@ export const transactions: Transaction[] = [
     customerId: '10',
     date: '2024-03-04',
     type: 'DEBIT',
-    mode: 'NEFT',
+    mode: 'CASH',
     amount: 1500000,
     description: 'Investment in Personal Property',
-    reference: 'NEFT24304GHI',
+    reference: 'CASH24304GHI',
     category: 'PERSONAL',
     purposeAlignment: 'DEVIATED'
   },
@@ -312,10 +311,10 @@ export const transactions: Transaction[] = [
     customerId: '8',
     date: '2024-02-22',
     type: 'DEBIT',
-    mode: 'NEFT',
+    mode: 'CASH',
     amount: 1800000,
     description: 'Personal Investment Portfolio',
-    reference: 'NEFT24222DEF',
+    reference: 'CASH24222DEF',
     category: 'PERSONAL',
     purposeAlignment: 'DEVIATED'
   },
@@ -336,10 +335,10 @@ export const transactions: Transaction[] = [
     customerId: '6',
     date: '2024-02-12',
     type: 'DEBIT',
-    mode: 'CHEQUE',
+    mode: 'CASH',
     amount: 5000000,
     description: 'Real Estate Investment',
-    reference: 'CHQ002347',
+    reference: 'CASH002347',
     category: 'PERSONAL',
     purposeAlignment: 'DEVIATED'
   }
