@@ -28,9 +28,19 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-[#fdfcfb] to-[#e2d1c3] p-6">
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex items-center justify-between bg-white/80 backdrop-blur-sm p-4 rounded-lg shadow-sm">
-          <h1 className="text-2xl font-bold text-[#333333]">
-            Janakalyan Bank
-          </h1>
+          <div className="flex items-center gap-4">
+            <img 
+              src="/lovable-uploads/38d91117-98e1-4137-b433-2aac756a49a2.png" 
+              alt="Bank Logo" 
+              className="h-12 w-12"
+            />
+            <div>
+              <h1 className="text-2xl font-bold text-[#333333]">
+                Janakalyan Bank
+              </h1>
+              <p className="text-sm text-gray-500">Transaction Monitoring System</p>
+            </div>
+          </div>
           <div className="text-sm text-gray-500">
             {new Date().toLocaleDateString('en-IN', { 
               weekday: 'long', 
