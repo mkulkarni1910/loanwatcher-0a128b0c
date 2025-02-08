@@ -1,5 +1,5 @@
 
-import { Transaction, formatCurrency } from '@/utils/dummyData';
+import { Transaction, formatCurrency, getCustomerTransactions } from '@/utils/dummyData';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Legend } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -51,31 +51,26 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
 
     // Group transactions by customer
     const groupedByCustomer = filteredTransactions.reduce((acc, t) => {
-      if (!acc[t.customerId]) {
-        acc[t.customerId] = {
+      const customerId = t.customerId;
+      if (!acc[customerId]) {
+        acc[customerId] = {
           transactions: [],
           totalAmount: 0,
-          count: 0,
-          customerName: t.customerName,
-          businessName: t.businessName
+          count: 0
         };
       }
-      acc[t.customerId].transactions.push(t);
-      acc[t.customerId].totalAmount += t.amount;
-      acc[t.customerId].count += 1;
+      acc[customerId].transactions.push(t);
+      acc[customerId].totalAmount += t.amount;
+      acc[customerId].count += 1;
       return acc;
     }, {} as Record<string, { 
       transactions: Transaction[], 
       totalAmount: number, 
-      count: number,
-      customerName: string,
-      businessName: string
+      count: number
     }>);
 
     return Object.entries(groupedByCustomer).map(([customerId, data]) => ({
       customerId,
-      customerName: data.customerName,
-      businessName: data.businessName,
       totalAmount: data.totalAmount,
       transactionCount: data.count
     }));
@@ -193,7 +188,7 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
                 name="Debit Amount"
                 radius={[4, 4, 0, 0]}
                 className="cursor-pointer"
-                fill={data => modeColors[data.name]}
+                fill={modeColors[debitData[0].name]}
               />
             </BarChart>
           </ResponsiveContainer>
@@ -257,8 +252,7 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
             <Table>
               <TableHeader>
                 <TableRow className="hover:bg-transparent">
-                  <TableHead className="text-base font-semibold text-gray-600">Customer Name</TableHead>
-                  <TableHead className="text-base font-semibold text-gray-600">Business Name</TableHead>
+                  <TableHead className="text-base font-semibold text-gray-600">Customer ID</TableHead>
                   <TableHead className="text-base font-semibold text-gray-600">Total Amount</TableHead>
                   <TableHead className="text-base font-semibold text-gray-600">Transaction Count</TableHead>
                   <TableHead></TableHead>
@@ -271,8 +265,7 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
                     className="hover:bg-gray-50 transition-colors cursor-pointer"
                     onClick={() => handleCustomerClick(detail.customerId)}
                   >
-                    <TableCell className="font-medium">{detail.customerName}</TableCell>
-                    <TableCell>{detail.businessName}</TableCell>
+                    <TableCell className="font-medium">{detail.customerId}</TableCell>
                     <TableCell>{formatCurrency(detail.totalAmount)}</TableCell>
                     <TableCell>{detail.transactionCount}</TableCell>
                     <TableCell>
