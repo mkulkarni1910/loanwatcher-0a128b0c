@@ -4,9 +4,14 @@ import { Badge } from "@/components/ui/badge";
 
 interface TransactionTableProps {
   transactions: Transaction[];
+  filterMode?: string;
 }
 
-export const TransactionTable = ({ transactions }: TransactionTableProps) => {
+export const TransactionTable = ({ transactions, filterMode }: TransactionTableProps) => {
+  const filteredTransactions = filterMode 
+    ? transactions.filter(t => t.mode === filterMode)
+    : transactions;
+
   return (
     <div className="overflow-x-auto">
       <table className="w-full">
@@ -21,7 +26,7 @@ export const TransactionTable = ({ transactions }: TransactionTableProps) => {
           </tr>
         </thead>
         <tbody>
-          {transactions.map(transaction => (
+          {filteredTransactions.map(transaction => (
             <tr 
               key={transaction.id} 
               className={`border-b border-gray-100 hover:bg-gray-50/50 transition-colors ${

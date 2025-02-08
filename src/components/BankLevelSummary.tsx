@@ -44,13 +44,19 @@ export const BankLevelSummary = ({ customers, transactions }: BankLevelSummaryPr
 
   const handleCustomerClick = (customerId: string) => {
     setDialogOpen(false);
+    // First dispatch event to select transactions tab
     const tabSelectEvent = new CustomEvent('tab-select', {
       detail: { tab: 'transactions' }
     });
     window.dispatchEvent(tabSelectEvent);
+    
+    // Then select the customer and set cash filter
     setTimeout(() => {
       const customerSelectEvent = new CustomEvent('select-customer', {
-        detail: { customerId }
+        detail: { 
+          customerId,
+          filterMode: selectedData?.mode // This will be 'CASH' when clicking from cash transactions
+        }
       });
       window.dispatchEvent(customerSelectEvent);
     }, 100);
