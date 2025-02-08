@@ -33,21 +33,36 @@ export const ComplianceAnalysis = ({ customers, transactions }: ComplianceAnalys
     return { level: 'High', color: 'bg-red-500' };
   };
 
+  const isTransactionCompliant = (transaction: Transaction, customerComplianceLevel: { level: string }) => {
+    if (customerComplianceLevel.level === 'High') {
+      // For high compliance customers, only RTGS and NEFT debit transactions are considered compliant
+      if (transaction.type === 'DEBIT') {
+        return ['RTGS', 'NEFT'].includes(transaction.mode);
+      }
+    }
+    return transaction.purposeAlignment !== 'DEVIATED';
+  };
+
   const getNonCompliantTransactions = (customerId: string) => {
     const analysis = getTransactionPurposeAnalysis(customerId);
-    return analysis.transactions.filter(t => t.purposeAlignment === 'DEVIATED');
+    const complianceLevel = getComplianceLevel(analysis.deviationPercentage);
+    
+    return analysis.transactions.filter(t => !isTransactionCompliant(t, complianceLevel));
   };
 
   const getComplianceAnalysis = (customer: Customer) => {
     const analysis = getTransactionPurposeAnalysis(customer.id);
+    const complianceLevel = getComplianceLevel(analysis.deviationPercentage);
     const nonCompliantTransactions = getNonCompliantTransactions(customer.id);
     const totalTransactionValue = analysis.transactions.reduce((sum, t) => sum + t.amount, 0);
     const deviatedValue = nonCompliantTransactions.reduce((sum, t) => sum + t.amount, 0);
-    const deviationPercentage = analysis.deviationPercentage;
+    const deviationPercentage = (deviatedValue / totalTransactionValue) * 100;
 
     let riskFactors = [];
-    if (nonCompliantTransactions.filter(t => t.mode === 'CASH').length > 0) {
-      riskFactors.push("High volume of non-compliant cash transactions");
+    const cashDebits = nonCompliantTransactions.filter(t => t.mode === 'CASH' && t.type === 'DEBIT');
+    
+    if (complianceLevel.level === 'High' && cashDebits.length > 0) {
+      riskFactors.push("Cash debits detected in high compliance account");
     }
     if (deviatedValue / totalTransactionValue > 0.3) {
       riskFactors.push("Large proportion of transaction value deviating from purpose");
