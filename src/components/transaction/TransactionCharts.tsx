@@ -1,9 +1,11 @@
+
 import { Transaction, formatCurrency, Customer } from '@/utils/dummyData';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Legend } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 interface TransactionChartsProps {
   transactions: Transaction[];
@@ -52,8 +54,18 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
       amount: t.amount,
       date: new Date(t.date).toLocaleDateString('en-IN'),
       reference: t.reference,
-      description: t.description
+      description: t.description,
+      customerId: t.customerId
     }));
+  };
+
+  const handleCustomerClick = (customerId: string) => {
+    setDialogOpen(false);
+    // Navigate to customer tab and set selected customer
+    const customerSelectEvent = new CustomEvent('select-customer', {
+      detail: { customerId }
+    });
+    window.dispatchEvent(customerSelectEvent);
   };
 
   const chartConfig = {
@@ -160,7 +172,7 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
                 name="Debit Amount"
                 radius={[4, 4, 0, 0]}
                 className="cursor-pointer"
-                fill={data => data.fill}
+                fill={(data) => data.fill}
               />
             </BarChart>
           </ResponsiveContainer>
@@ -228,6 +240,7 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
                   <TableHead>Amount</TableHead>
                   <TableHead>Reference</TableHead>
                   <TableHead>Description</TableHead>
+                  <TableHead>Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -237,6 +250,15 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
                     <TableCell>{formatCurrency(detail.amount)}</TableCell>
                     <TableCell>{detail.reference}</TableCell>
                     <TableCell>{detail.description}</TableCell>
+                    <TableCell>
+                      <Button
+                        variant="ghost"
+                        className="hover:bg-primary/10"
+                        onClick={() => handleCustomerClick(detail.customerId)}
+                      >
+                        View Customer
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -247,3 +269,4 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
     </div>
   );
 };
+
