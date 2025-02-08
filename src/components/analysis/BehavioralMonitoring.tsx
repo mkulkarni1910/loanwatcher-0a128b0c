@@ -17,7 +17,10 @@ interface RiskMetric {
   icon: React.ReactNode;
   description: string;
   color: string;
-  affectedCustomers: Customer[];
+  affectedCustomers: {
+    customer: Customer;
+    transactions: Transaction[];
+  }[];
 }
 
 export const BehavioralMonitoring = ({ customers, transactions }: BehavioralMonitoringProps) => {
@@ -35,10 +38,20 @@ export const BehavioralMonitoring = ({ customers, transactions }: BehavioralMoni
         icon: <AlertTriangle className="h-5 w-5" />,
         description: "Customers with significant purpose deviation",
         color: "bg-red-500",
-        affectedCustomers: customers.filter(customer => {
-          const analysis = getTransactionPurposeAnalysis(customer.id);
-          return analysis.deviationPercentage > 20;
-        }),
+        affectedCustomers: customers
+          .filter(customer => {
+            const analysis = getTransactionPurposeAnalysis(customer.id);
+            return analysis.deviationPercentage > 20;
+          })
+          .map(customer => ({
+            customer,
+            transactions: transactions.filter(t => 
+              t.customerId === customer.id && 
+              t.purposeAlignment === 'DEVIATED' && 
+              t.mode === 'CASH'
+            )
+          }))
+          .filter(item => item.transactions.length > 0)
       },
       {
         title: "Fraud Risk",
@@ -49,8 +62,11 @@ export const BehavioralMonitoring = ({ customers, transactions }: BehavioralMoni
         affectedCustomers: Array.from(new Set(
           transactions
             .filter(t => t.type === 'DEBIT' && t.mode === 'CASH' && t.amount > 1000000)
-            .map(t => customers.find(c => c.id === t.customerId))
-            .filter((c): c is Customer => c !== undefined)
+            .map(t => ({
+              customer: customers.find(c => c.id === t.customerId),
+              transactions: [t]
+            }))
+            .filter((item): item is { customer: Customer, transactions: Transaction[] } => item.customer !== undefined)
         )),
       },
       {
@@ -62,8 +78,11 @@ export const BehavioralMonitoring = ({ customers, transactions }: BehavioralMoni
         affectedCustomers: Array.from(new Set(
           transactions
             .filter(t => t.purposeAlignment === 'DEVIATED')
-            .map(t => customers.find(c => c.id === t.customerId))
-            .filter((c): c is Customer => c !== undefined)
+            .map(t => ({
+              customer: customers.find(c => c.id === t.customerId),
+              transactions: [t]
+            }))
+            .filter((item): item is { customer: Customer, transactions: Transaction[] } => item.customer !== undefined)
         )),
       },
       {
@@ -75,10 +94,15 @@ export const BehavioralMonitoring = ({ customers, transactions }: BehavioralMoni
         icon: <Bell className="h-5 w-5" />,
         description: "Customers requiring attention",
         color: "bg-blue-500",
-        affectedCustomers: customers.filter(customer => {
-          const analysis = getTransactionPurposeAnalysis(customer.id);
-          return analysis.deviationPercentage > 10;
-        }),
+        affectedCustomers: customers
+          .filter(customer => {
+            const analysis = getTransactionPurposeAnalysis(customer.id);
+            return analysis.deviationPercentage > 10;
+          })
+          .map(customer => ({
+            customer,
+            transactions: transactions.filter(t => t.customerId === customer.id && t.purposeAlignment === 'DEVIATED')
+          })),
       },
     ];
 
@@ -118,7 +142,7 @@ export const BehavioralMonitoring = ({ customers, transactions }: BehavioralMoni
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-4xl">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               {selectedMetric?.icon && (
@@ -137,24 +161,36 @@ export const BehavioralMonitoring = ({ customers, transactions }: BehavioralMoni
                   <TableHead>Business Name</TableHead>
                   <TableHead>Loan Purpose</TableHead>
                   <TableHead>Risk Level</TableHead>
+                  <TableHead>Transaction Type</TableHead>
+                  <TableHead>Amount</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {selectedMetric?.affectedCustomers.map((customer) => (
-                  <TableRow key={customer.id}>
-                    <TableCell className="font-medium">{customer.name}</TableCell>
-                    <TableCell>{customer.businessName}</TableCell>
-                    <TableCell>{customer.loanPurpose}</TableCell>
-                    <TableCell>
-                      <span className={`px-2 py-1 rounded-full text-xs ${
-                        customer.riskLevel === 'HIGH' ? 'bg-red-100 text-red-800' :
-                        customer.riskLevel === 'MEDIUM' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-green-100 text-green-800'
-                      }`}>
-                        {customer.riskLevel}
-                      </span>
-                    </TableCell>
-                  </TableRow>
+                {selectedMetric?.affectedCustomers.map(({ customer, transactions }) => (
+                  transactions.map((transaction) => (
+                    <TableRow key={`${customer.id}-${transaction.id}`}>
+                      <TableCell className="font-medium">{customer.name}</TableCell>
+                      <TableCell>{customer.businessName}</TableCell>
+                      <TableCell>{customer.loanPurpose}</TableCell>
+                      <TableCell>
+                        <span className={`px-2 py-1 rounded-full text-xs ${
+                          customer.riskLevel === 'HIGH' ? 'bg-red-100 text-red-800' :
+                          customer.riskLevel === 'MEDIUM' ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-green-100 text-green-800'
+                        }`}>
+                          {customer.riskLevel}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <span className={`px-2 py-1 rounded-full text-xs ${
+                          transaction.mode === 'CASH' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'
+                        }`}>
+                          {transaction.mode}
+                        </span>
+                      </TableCell>
+                      <TableCell>{formatCurrency(transaction.amount)}</TableCell>
+                    </TableRow>
+                  ))
                 ))}
               </TableBody>
             </Table>
@@ -164,3 +200,4 @@ export const BehavioralMonitoring = ({ customers, transactions }: BehavioralMoni
     </>
   );
 };
+
