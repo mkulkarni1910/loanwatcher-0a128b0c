@@ -5,6 +5,7 @@ import { IndianRupee, Users } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Legend } from 'recharts';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 interface BankLevelSummaryProps {
@@ -39,6 +40,20 @@ export const BankLevelSummary = ({ customers, transactions }: BankLevelSummaryPr
       return `₹${(value / 10000000).toFixed(1)}Cr`;
     }
     return `₹${(value / 100000).toFixed(1)}L`;
+  };
+
+  const handleCustomerClick = (customerId: string) => {
+    setDialogOpen(false);
+    const tabSelectEvent = new CustomEvent('tab-select', {
+      detail: { tab: 'transactions' }
+    });
+    window.dispatchEvent(tabSelectEvent);
+    setTimeout(() => {
+      const customerSelectEvent = new CustomEvent('select-customer', {
+        detail: { customerId }
+      });
+      window.dispatchEvent(customerSelectEvent);
+    }, 100);
   };
 
   const getTransactionDetails = () => {
@@ -228,6 +243,7 @@ export const BankLevelSummary = ({ customers, transactions }: BankLevelSummaryPr
                   <TableHead>Business Name</TableHead>
                   <TableHead>Total Amount</TableHead>
                   <TableHead>Transaction Count</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -237,6 +253,16 @@ export const BankLevelSummary = ({ customers, transactions }: BankLevelSummaryPr
                     <TableCell>{customer.businessName}</TableCell>
                     <TableCell>{formatCurrency(total)}</TableCell>
                     <TableCell>{transactions.length}</TableCell>
+                    <TableCell>
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => handleCustomerClick(customer.id)}
+                        className="hover:bg-primary/10"
+                      >
+                        View Customer Details
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -247,3 +273,4 @@ export const BankLevelSummary = ({ customers, transactions }: BankLevelSummaryPr
     </div>
   );
 };
+
