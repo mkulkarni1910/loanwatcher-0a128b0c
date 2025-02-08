@@ -1,4 +1,3 @@
-
 import { Transaction, formatCurrency, getCustomerTransactions } from '@/utils/dummyData';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Legend } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -78,10 +77,16 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
 
   const handleCustomerClick = (customerId: string) => {
     setDialogOpen(false);
-    const customerSelectEvent = new CustomEvent('select-customer', {
-      detail: { customerId }
+    const tabSelectEvent = new CustomEvent('tab-select', {
+      detail: { tab: 'transactions' }
     });
-    window.dispatchEvent(customerSelectEvent);
+    window.dispatchEvent(tabSelectEvent);
+    setTimeout(() => {
+      const customerSelectEvent = new CustomEvent('select-customer', {
+        detail: { customerId }
+      });
+      window.dispatchEvent(customerSelectEvent);
+    }, 100);
   };
 
   const chartConfig = {
@@ -188,7 +193,7 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
                 name="Debit Amount"
                 radius={[4, 4, 0, 0]}
                 className="cursor-pointer"
-                fill={modeColors[debitData[0].name]}
+                fill={modeColors['CASH']}
               />
             </BarChart>
           </ResponsiveContainer>
