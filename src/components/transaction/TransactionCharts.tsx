@@ -261,26 +261,26 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
                   <TableHead className="text-base font-semibold text-gray-600">Customer ID</TableHead>
                   <TableHead className="text-base font-semibold text-gray-600">Total Amount</TableHead>
                   <TableHead className="text-base font-semibold text-gray-600">Transaction Count</TableHead>
-                  <TableHead></TableHead>
+                  <TableHead className="text-base font-semibold text-gray-600">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {getTransactionDetails().map((detail) => (
                   <TableRow 
                     key={detail.customerId}
-                    className="hover:bg-gray-50 transition-colors cursor-pointer"
-                    onClick={() => handleCustomerClick(detail.customerId)}
+                    className="hover:bg-gray-50 transition-colors"
                   >
                     <TableCell className="font-medium">{detail.customerId}</TableCell>
                     <TableCell>{formatCurrency(detail.totalAmount)}</TableCell>
                     <TableCell>{detail.transactionCount}</TableCell>
-                    <TableCell>
+                    <TableCell className="space-x-2">
                       <Button
-                        variant="ghost"
+                        variant="secondary"
                         size="sm"
+                        onClick={() => handleCustomerClick(detail.customerId)}
                         className="hover:bg-primary/10"
                       >
-                        View Details
+                        View Customer Details
                       </Button>
                     </TableCell>
                   </TableRow>
