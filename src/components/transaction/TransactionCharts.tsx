@@ -61,12 +61,12 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
 
   const chartConfig = {
     xAxis: { 
-      tick: { fill: '#333333', fontSize: 8 },
+      tick: { fill: '#333333', fontSize: 12 },
       stroke: '#D6BCFA',
       tickLine: { stroke: '#D6BCFA' }
     },
     yAxis: {
-      tick: { fill: '#333333', fontSize: 8 },
+      tick: { fill: '#333333', fontSize: 12 },
       stroke: '#D6BCFA',
       tickLine: { stroke: '#D6BCFA' },
       tickFormatter: (value: number) => `₹${(value / 1000000).toFixed(1)}M`
@@ -78,15 +78,15 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
         border: '1px solid #E5DEFF',
         boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
         padding: '8px 12px',
-        fontSize: '8px',
+        fontSize: '12px',
         color: '#333333'
       },
-      labelStyle: { color: '#6E59A5', fontWeight: 600, fontSize: '10px' }
+      labelStyle: { color: '#6E59A5', fontWeight: 600, fontSize: '12px' }
     },
     legend: {
       wrapperStyle: {
         paddingTop: '20px',
-        fontSize: '8px',
+        fontSize: '12px',
         color: '#333333'
       }
     }
@@ -163,7 +163,7 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
                 name="Debit Amount"
                 radius={[4, 4, 0, 0]}
                 className="cursor-pointer"
-                fill={(data) => data.fill}
+                fill={data => data.fill}
               />
             </BarChart>
           </ResponsiveContainer>
@@ -202,14 +202,14 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
                 dataKey="credit" 
                 radius={[4, 4, 0, 0]}
                 className="cursor-pointer"
-                fill={(data) => data.fillCredit}
+                fill={data => data.fillCredit}
               />
               <Bar 
                 name="Debit" 
                 dataKey="debit" 
                 radius={[4, 4, 0, 0]}
                 className="cursor-pointer"
-                fill={(data) => data.fillDebit}
+                fill={data => data.fillDebit}
               />
             </BarChart>
           </ResponsiveContainer>
