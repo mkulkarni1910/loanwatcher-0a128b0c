@@ -49,19 +49,35 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
       t.type === selectedData.type.toUpperCase()
     );
 
-    return filteredTransactions.map(t => ({
-      transaction: t,
-      amount: t.amount,
-      date: new Date(t.date).toLocaleDateString('en-IN'),
-      reference: t.reference,
-      description: t.description,
-      customerId: t.customerId
-    }));
+    // Group transactions by customer
+    const groupedByCustomer = filteredTransactions.reduce((acc, t) => {
+      if (!acc[t.customerId]) {
+        acc[t.customerId] = {
+          transactions: [],
+          totalAmount: 0,
+          count: 0
+        };
+      }
+      acc[t.customerId].transactions.push(t);
+      acc[t.customerId].totalAmount += t.amount;
+      acc[t.customerId].count += 1;
+      return acc;
+    }, {} as Record<string, { transactions: Transaction[], totalAmount: number, count: number }>);
+
+    return Object.entries(groupedByCustomer).map(([customerId, data]) => {
+      const customerTransaction = data.transactions[0];
+      return {
+        customerId,
+        customerName: customerTransaction.customerName,
+        businessName: customerTransaction.businessName,
+        totalAmount: data.totalAmount,
+        transactionCount: data.count
+      };
+    });
   };
 
   const handleCustomerClick = (customerId: string) => {
     setDialogOpen(false);
-    // Navigate to customer tab and set selected customer
     const customerSelectEvent = new CustomEvent('select-customer', {
       detail: { customerId }
     });
@@ -228,35 +244,39 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-3xl">
           <DialogHeader>
-            <DialogTitle>
-              {selectedData?.mode} {selectedData?.type.toUpperCase()} Transactions
+            <DialogTitle className="text-2xl font-bold">
+              {selectedData?.mode} {selectedData?.type.toUpperCase()} Details
             </DialogTitle>
           </DialogHeader>
           <div className="mt-4">
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Reference</TableHead>
-                  <TableHead>Description</TableHead>
-                  <TableHead>Action</TableHead>
+                <TableRow className="hover:bg-transparent">
+                  <TableHead className="text-base font-semibold text-gray-600">Customer Name</TableHead>
+                  <TableHead className="text-base font-semibold text-gray-600">Business Name</TableHead>
+                  <TableHead className="text-base font-semibold text-gray-600">Total Amount</TableHead>
+                  <TableHead className="text-base font-semibold text-gray-600">Transaction Count</TableHead>
+                  <TableHead></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {getTransactionDetails().map((detail) => (
-                  <TableRow key={detail.transaction.id}>
-                    <TableCell>{detail.date}</TableCell>
-                    <TableCell>{formatCurrency(detail.amount)}</TableCell>
-                    <TableCell>{detail.reference}</TableCell>
-                    <TableCell>{detail.description}</TableCell>
+                  <TableRow 
+                    key={detail.customerId}
+                    className="hover:bg-gray-50 transition-colors cursor-pointer"
+                    onClick={() => handleCustomerClick(detail.customerId)}
+                  >
+                    <TableCell className="font-medium">{detail.customerName}</TableCell>
+                    <TableCell>{detail.businessName}</TableCell>
+                    <TableCell>{formatCurrency(detail.totalAmount)}</TableCell>
+                    <TableCell>{detail.transactionCount}</TableCell>
                     <TableCell>
                       <Button
                         variant="ghost"
+                        size="sm"
                         className="hover:bg-primary/10"
-                        onClick={() => handleCustomerClick(detail.customerId)}
                       >
-                        View Customer
+                        View Details
                       </Button>
                     </TableCell>
                   </TableRow>
