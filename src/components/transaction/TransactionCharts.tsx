@@ -1,3 +1,4 @@
+
 import { Transaction, formatCurrency, getCustomerTransactions } from '@/utils/dummyData';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Legend } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
