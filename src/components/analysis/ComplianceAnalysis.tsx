@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Customer, Transaction, getTransactionPurposeAnalysis } from "@/utils/dummyData";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -24,6 +25,12 @@ export const ComplianceAnalysis = ({ customers, transactions }: ComplianceAnalys
     if (deviationPercentage <= 10) return { level: 'High', color: 'bg-green-500' };
     if (deviationPercentage <= 20) return { level: 'Medium', color: 'bg-yellow-500' };
     return { level: 'Low', color: 'bg-red-500' };
+  };
+
+  const getRiskLevel = (deviationPercentage: number) => {
+    if (deviationPercentage <= 10) return { level: 'Low', color: 'bg-green-500' };
+    if (deviationPercentage <= 20) return { level: 'Medium', color: 'bg-yellow-500' };
+    return { level: 'High', color: 'bg-red-500' };
   };
 
   const isTransactionCompliant = (transaction: Transaction, customerComplianceLevel: { level: string }) => {
@@ -208,7 +215,7 @@ export const ComplianceAnalysis = ({ customers, transactions }: ComplianceAnalys
                             </Alert>
                           )}
 
-                          {!compliance.level === 'High' && (
+                          {compliance.level !== 'High' && nonCompliantTransactions.length > 0 && (
                             <div>
                               <h3 className="font-medium mb-2">Non-Compliant Transactions</h3>
                               <TransactionTable transactions={nonCompliantTransactions} />
@@ -227,3 +234,4 @@ export const ComplianceAnalysis = ({ customers, transactions }: ComplianceAnalys
     </Card>
   );
 };
+

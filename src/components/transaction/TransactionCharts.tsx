@@ -36,9 +36,7 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
     credit: transactions.filter(t => t.type === 'CREDIT' && t.mode === mode)
       .reduce((sum, t) => sum + t.amount, 0),
     debit: transactions.filter(t => t.type === 'DEBIT' && t.mode === mode)
-      .reduce((sum, t) => sum + t.amount, 0),
-    fillCredit: modeColors[mode],
-    fillDebit: modeColors[mode]
+      .reduce((sum, t) => sum + t.amount, 0)
   }));
 
   const getTransactionDetails = () => {
