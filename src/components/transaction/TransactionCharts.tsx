@@ -1,4 +1,3 @@
-
 import { Transaction, formatCurrency, Customer } from '@/utils/dummyData';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Legend } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,7 +24,7 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
       name: mode,
       value: transactions.filter(t => t.type === type && t.mode === mode)
         .reduce((sum, t) => sum + t.amount, 0),
-      fill: mode === 'CASH' ? '#ea384c' : '#7E69AB'
+      fill: modeColors[mode]
     }));
   };
 
@@ -38,8 +37,8 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
       .reduce((sum, t) => sum + t.amount, 0),
     debit: transactions.filter(t => t.type === 'DEBIT' && t.mode === mode)
       .reduce((sum, t) => sum + t.amount, 0),
-    fillCredit: mode === 'CASH' ? '#ea384c' : '#9b87f5',
-    fillDebit: mode === 'CASH' ? '#ea384c' : '#7E69AB'
+    fillCredit: modeColors[mode],
+    fillDebit: modeColors[mode]
   }));
 
   const getTransactionDetails = () => {
@@ -200,16 +199,16 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
               <Bar 
                 name="Credit" 
                 dataKey="credit" 
+                fill="#9b87f5"
                 radius={[4, 4, 0, 0]}
                 className="cursor-pointer"
-                fill={data => data.fillCredit}
               />
               <Bar 
                 name="Debit" 
                 dataKey="debit" 
+                fill="#7E69AB"
                 radius={[4, 4, 0, 0]}
                 className="cursor-pointer"
-                fill={data => data.fillDebit}
               />
             </BarChart>
           </ResponsiveContainer>
@@ -250,4 +249,3 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
     </div>
   );
 };
-

@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Customer, Transaction, getTransactionPurposeAnalysis } from "@/utils/dummyData";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -27,12 +26,6 @@ export const ComplianceAnalysis = ({ customers, transactions }: ComplianceAnalys
     return { level: 'Low', color: 'bg-red-500' };
   };
 
-  const getRiskLevel = (deviationPercentage: number) => {
-    if (deviationPercentage <= 10) return { level: 'Low', color: 'bg-green-500' };
-    if (deviationPercentage <= 20) return { level: 'Medium', color: 'bg-yellow-500' };
-    return { level: 'High', color: 'bg-red-500' };
-  };
-
   const isTransactionCompliant = (transaction: Transaction, customerComplianceLevel: { level: string }) => {
     if (customerComplianceLevel.level === 'High') {
       // For high compliance customers, only RTGS and NEFT debit transactions are considered compliant
@@ -46,6 +39,11 @@ export const ComplianceAnalysis = ({ customers, transactions }: ComplianceAnalys
   const getNonCompliantTransactions = (customerId: string) => {
     const analysis = getTransactionPurposeAnalysis(customerId);
     const complianceLevel = getComplianceLevel(analysis.deviationPercentage);
+    
+    // Don't show any non-compliant transactions for high compliance customers
+    if (complianceLevel.level === 'High') {
+      return [];
+    }
     
     return analysis.transactions.filter(t => !isTransactionCompliant(t, complianceLevel));
   };
@@ -210,10 +208,12 @@ export const ComplianceAnalysis = ({ customers, transactions }: ComplianceAnalys
                             </Alert>
                           )}
 
-                          <div>
-                            <h3 className="font-medium mb-2">Non-Compliant Transactions</h3>
-                            <TransactionTable transactions={nonCompliantTransactions} />
-                          </div>
+                          {!compliance.level === 'High' && (
+                            <div>
+                              <h3 className="font-medium mb-2">Non-Compliant Transactions</h3>
+                              <TransactionTable transactions={nonCompliantTransactions} />
+                            </div>
+                          )}
                         </div>
                       </DialogDescription>
                     </DialogHeader>
