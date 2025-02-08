@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Customer, Transaction, getTransactionPurposeAnalysis } from "@/utils/dummyData";
+import { Customer, Transaction, getTransactionPurposeAnalysis, formatCurrency } from "@/utils/dummyData";
 import { AlertTriangle, ShieldAlert, ArrowRightLeft, Bell } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -62,12 +62,12 @@ export const BehavioralMonitoring = ({ customers, transactions }: BehavioralMoni
         affectedCustomers: Array.from(new Set(
           transactions
             .filter(t => t.type === 'DEBIT' && t.mode === 'CASH' && t.amount > 1000000)
-            .map(t => ({
-              customer: customers.find(c => c.id === t.customerId),
-              transactions: [t]
-            }))
-            .filter((item): item is { customer: Customer, transactions: Transaction[] } => item.customer !== undefined)
-        )),
+            .map(t => {
+              const customer = customers.find(c => c.id === t.customerId);
+              return customer ? { customer, transactions: [t] } : null;
+            })
+            .filter((item): item is { customer: Customer, transactions: Transaction[] } => item !== null)
+        ))
       },
       {
         title: "Fund Diversion",
@@ -78,12 +78,12 @@ export const BehavioralMonitoring = ({ customers, transactions }: BehavioralMoni
         affectedCustomers: Array.from(new Set(
           transactions
             .filter(t => t.purposeAlignment === 'DEVIATED')
-            .map(t => ({
-              customer: customers.find(c => c.id === t.customerId),
-              transactions: [t]
-            }))
-            .filter((item): item is { customer: Customer, transactions: Transaction[] } => item.customer !== undefined)
-        )),
+            .map(t => {
+              const customer = customers.find(c => c.id === t.customerId);
+              return customer ? { customer, transactions: [t] } : null;
+            })
+            .filter((item): item is { customer: Customer, transactions: Transaction[] } => item !== null)
+        ))
       },
       {
         title: "Active Alerts",
@@ -102,7 +102,8 @@ export const BehavioralMonitoring = ({ customers, transactions }: BehavioralMoni
           .map(customer => ({
             customer,
             transactions: transactions.filter(t => t.customerId === customer.id && t.purposeAlignment === 'DEVIATED')
-          })),
+          }))
+          .filter(item => item.transactions.length > 0)
       },
     ];
 
@@ -166,7 +167,7 @@ export const BehavioralMonitoring = ({ customers, transactions }: BehavioralMoni
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {selectedMetric?.affectedCustomers.map(({ customer, transactions }) => (
+                {selectedMetric?.affectedCustomers?.map(({ customer, transactions }) => (
                   transactions.map((transaction) => (
                     <TableRow key={`${customer.id}-${transaction.id}`}>
                       <TableCell className="font-medium">{customer.name}</TableCell>
@@ -200,4 +201,3 @@ export const BehavioralMonitoring = ({ customers, transactions }: BehavioralMoni
     </>
   );
 };
-
