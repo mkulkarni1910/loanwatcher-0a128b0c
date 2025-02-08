@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Transaction, Customer, formatCurrency } from '@/utils/dummyData';
 import { IndianRupee, Users } from 'lucide-react';
@@ -91,6 +90,8 @@ export const BankLevelSummary = ({ customers, transactions }: BankLevelSummaryPr
 
   return (
     <div className="space-y-6">
+      <h2 className="text-2xl font-bold text-[#333333]">Bank Level Summary</h2>
+      
       <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="text-xl text-[#333333]">Overview</CardTitle>
@@ -279,4 +280,3 @@ export const BankLevelSummary = ({ customers, transactions }: BankLevelSummaryPr
     </div>
   );
 };
-
