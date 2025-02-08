@@ -7,15 +7,19 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { TransactionTable } from "../transaction/TransactionTable";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
-import { AlertTriangle, CheckCircle } from "lucide-react";
+import { AlertTriangle, CheckCircle, Filter } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface ComplianceAnalysisProps {
   customers: Customer[];
   transactions: Transaction[];
 }
 
+type ComplianceLevel = 'All' | 'High' | 'Medium' | 'Low';
+
 export const ComplianceAnalysis = ({ customers, transactions }: ComplianceAnalysisProps) => {
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+  const [selectedComplianceLevel, setSelectedComplianceLevel] = useState<ComplianceLevel>('All');
 
   const getComplianceLevel = (deviationPercentage: number) => {
     if (deviationPercentage <= 10) return { level: 'High', color: 'bg-green-500' };
@@ -63,10 +67,36 @@ export const ComplianceAnalysis = ({ customers, transactions }: ComplianceAnalys
     };
   };
 
+  const filteredCustomers = customers.filter(customer => {
+    if (selectedComplianceLevel === 'All') return true;
+    const analysis = getTransactionPurposeAnalysis(customer.id);
+    const compliance = getComplianceLevel(analysis.deviationPercentage);
+    return compliance.level === selectedComplianceLevel;
+  });
+
   return (
     <Card className="shadow-sm border-0 bg-white/80 backdrop-blur-sm">
       <CardHeader>
-        <CardTitle>Customer Compliance Overview</CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle>Customer Compliance Overview</CardTitle>
+          <div className="flex items-center gap-2">
+            <Filter className="h-4 w-4 text-gray-500" />
+            <Select
+              value={selectedComplianceLevel}
+              onValueChange={(value) => setSelectedComplianceLevel(value as ComplianceLevel)}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Filter by compliance" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="All">All Levels</SelectItem>
+                <SelectItem value="High">High Compliance</SelectItem>
+                <SelectItem value="Medium">Medium Compliance</SelectItem>
+                <SelectItem value="Low">Low Compliance</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
       </CardHeader>
       <CardContent>
         <Table>
@@ -80,7 +110,7 @@ export const ComplianceAnalysis = ({ customers, transactions }: ComplianceAnalys
             </TableRow>
           </TableHeader>
           <TableBody>
-            {customers.map(customer => {
+            {filteredCustomers.map(customer => {
               const analysis = getTransactionPurposeAnalysis(customer.id);
               const compliance = getComplianceLevel(analysis.deviationPercentage);
               const risk = getRiskLevel(analysis.deviationPercentage);
@@ -182,4 +212,3 @@ export const ComplianceAnalysis = ({ customers, transactions }: ComplianceAnalys
     </Card>
   );
 };
-
