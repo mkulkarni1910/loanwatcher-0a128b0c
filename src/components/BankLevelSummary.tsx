@@ -49,12 +49,12 @@ export const BankLevelSummary = ({ customers, transactions }: BankLevelSummaryPr
     });
     window.dispatchEvent(tabSelectEvent);
     
-    // Then select the customer and set cash filter
+    // Then select the customer and set mode filter
     setTimeout(() => {
       const customerSelectEvent = new CustomEvent('select-customer', {
         detail: { 
           customerId,
-          filterMode: selectedData?.mode // This will be 'CASH' when clicking from cash transactions
+          filterMode: selectedData?.mode // This will be 'CASH', 'RTGS', etc.
         }
       });
       window.dispatchEvent(customerSelectEvent);
