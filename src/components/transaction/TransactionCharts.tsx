@@ -1,5 +1,4 @@
-
-import { Transaction, formatCurrency, Customer } from '@/utils/dummyData';
+import { Transaction, formatCurrency } from '@/utils/dummyData';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Legend } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -51,29 +50,33 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
 
     // Group transactions by customer
     const groupedByCustomer = filteredTransactions.reduce((acc, t) => {
-      if (!acc[t.customerId]) {
-        acc[t.customerId] = {
+      const customerId = t.customer.id;
+      if (!acc[customerId]) {
+        acc[customerId] = {
           transactions: [],
           totalAmount: 0,
-          count: 0
+          count: 0,
+          customer: t.customer
         };
       }
-      acc[t.customerId].transactions.push(t);
-      acc[t.customerId].totalAmount += t.amount;
-      acc[t.customerId].count += 1;
+      acc[customerId].transactions.push(t);
+      acc[customerId].totalAmount += t.amount;
+      acc[customerId].count += 1;
       return acc;
-    }, {} as Record<string, { transactions: Transaction[], totalAmount: number, count: number }>);
+    }, {} as Record<string, { 
+      transactions: Transaction[], 
+      totalAmount: number, 
+      count: number,
+      customer: Transaction['customer']
+    }>);
 
-    return Object.entries(groupedByCustomer).map(([customerId, data]) => {
-      const customerTransaction = data.transactions[0];
-      return {
-        customerId,
-        customerName: customerTransaction.customerName,
-        businessName: customerTransaction.businessName,
-        totalAmount: data.totalAmount,
-        transactionCount: data.count
-      };
-    });
+    return Object.entries(groupedByCustomer).map(([customerId, data]) => ({
+      customerId,
+      customerName: data.customer.name,
+      businessName: data.customer.businessName,
+      totalAmount: data.totalAmount,
+      transactionCount: data.count
+    }));
   };
 
   const handleCustomerClick = (customerId: string) => {
@@ -289,4 +292,3 @@ export const TransactionCharts = ({ transactions, modeColors }: TransactionChart
     </div>
   );
 };
-
